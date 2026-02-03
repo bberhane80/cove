@@ -1,73 +1,19 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
-  <div class="container">
-    <%= link_to "Cove", root_path, class: "navbar-brand" %>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+<%= link_to root_path, class: "nav-link" do %>
+  <span>Home</span>
+<% end %>
 
+<%= link_to listings_path, class: "nav-link" do %>
+  <span>Browse Listings</span>
+<% end %>
 
-      <form class="d-flex me-3" onsubmit="event.preventDefault(); var u=this.elements['username'].value.trim(); if(u){window.location.href='/'+encodeURIComponent(u);} return false;">
-        <input class="form-control me-2" type="search" name="username" placeholder="Search users..." aria-label="Search" style="width: 180px;">
-        <button class="btn btn-outline-secondary" type="submit">Search</button>
-      </form>
+<%= link_to bookmarks_path, class: "nav-link" do %>
+  <span>My Bookmarks</span>
+<% end %>
 
-      <ul class="navbar-nav me-auto">
-        <% if user_signed_in? && current_user&.username.present? %>
-          <li class="nav-item">
-            <%= link_to feed_path(current_user.username), class: "nav-link" do %>
-              <i class="fas fa-users fa-fw"></i> Feed
-            <% end %>
-          </li>
-          <li class="nav-item">
-            <%= link_to discover_path(current_user.username), class: "nav-link" do %>
-              <i class="fas fa-compass fa-fw"></i> Discover
-            <% end %>
-          </li>
-        <% end %>
-      </ul>
+<%= link_to user_path(current_user), class: "nav-link" do %>
+  <span>My Profile</span>
+<% end %>
 
-      <ul class="navbar-nav ms-auto">
-        <% if user_signed_in? %>
-          <li class="nav-item">
-            <%= link_to new_photo_path, class: "nav-link" do %>
-              <i class="fas fa-plus-circle"></i> Add post
-            <% end %>
-          </li>
-
-          <% if current_user&.username.present? %>
-            <li class="nav-item">
-              <%= link_to user_path(current_user.username), class: "nav-link" do %>
-                <i class="fa-solid fa-house"></i>Your profile
-              <% end %>
-            </li>
-          <% end %>
-
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              <%= current_user.username %>
-            </a>
-            <ul class="dropdown-menu">
-              <li>
-                <%= link_to "Edit Profile", edit_user_registration_path, class: "dropdown-item" %>
-              </li>
-              <li>
-                <%= link_to "Sign out", destroy_user_session_path, class: "dropdown-item", method: :delete %>
-              </li>
-            </ul>
-          </li>
-
-        <% else %>
-
-          <li class="nav-item">
-            <%= link_to "Sign in", new_user_session_path, class: "nav-link" %>
-          </li>
-          <li class="nav-item">
-            <%= link_to "Sign up", new_user_registration_path, class: "nav-link" %>
-          </li>
-
-        <% end %>
-      </ul>
-    </div>
-  </div>
-</nav>
+<%= link_to destroy_user_session_path, method: :delete, class: "nav-link" do %>
+  <span>Sign Out</span>
+<% end %>

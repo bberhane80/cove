@@ -4,6 +4,7 @@ Rails.application.routes.draw do
 
   root to: "listings#index"
 
-  resources :listings, only: [:index, :show]
+resources :users, only: [:show, :edit, :update]
+resources :listings, only: [:index, :show]
 resources :bookmarks, only: [:create, :destroy, :index]
 end
