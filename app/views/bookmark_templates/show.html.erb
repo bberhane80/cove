@@ -1,0 +1,81 @@
+<h1>
+  Bookmark #<%= @the_bookmark.id %> details
+</h1>
+
+<article>
+  <div>
+    <a href="/bookmarks">
+      Go back
+    </a>
+  </div>
+
+  <div>
+    <a href="/delete_bookmark/<%= @the_bookmark.id %>">
+      Delete bookmark
+    </a>
+  </div>
+  <dl>
+    <dt>
+      User
+    </dt>
+    <dd>
+      <%= @the_bookmark.user_id %>
+    </dd>
+
+    <dt>
+      Listing
+    </dt>
+    <dd>
+      <%= @the_bookmark.listing_id %>
+    </dd>
+
+    <dt>
+      Created at
+    </dt>
+    <dd>
+      <%= time_ago_in_words(@the_bookmark.created_at) %> ago
+    </dd>
+
+    <dt>
+      Updated at
+    </dt>
+    <dd>
+      <%= time_ago_in_words(@the_bookmark.updated_at) %> ago
+    </dd>
+  </dl>
+</article>
+
+<hr>
+
+
+<article>
+  <header>
+    <h2>
+      Edit bookmark
+    </h2>
+  </header>
+
+  <form action="/modify_bookmark/<%= @the_bookmark.id %>"  method="post" >
+    <div>
+      <label for="user_id_box">
+        User
+      </label>
+
+      <input type="text" id="user_id_box" name="query_user_id" value="<%= @the_bookmark.user_id %>">
+    </div>
+
+    <div>
+      <label for="listing_id_box">
+        Listing
+      </label>
+
+      <input type="text" id="listing_id_box" name="query_listing_id" value="<%= @the_bookmark.listing_id %>">
+    </div>
+
+    <button type="submit">
+      Update bookmark
+    </button>
+  </form>
+</article>
+
+<hr>

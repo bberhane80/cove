@@ -1,0 +1,51 @@
+<h1>
+  List of all bookmarks
+</h1>
+
+<hr>
+
+<article>
+  <header>
+    <h2>
+      Add a new bookmark
+    </h2>
+  </header>
+
+  <form action="/insert_bookmark" method="post">
+    <div>
+      <label for="user_id_box">
+        User
+      </label>
+
+      <input type="text" id="user_id_box" name="query_user_id">
+    </div>
+
+    <div>
+      <label for="listing_id_box">
+        Listing
+      </label>
+
+      <input type="text" id="listing_id_box" name="query_listing_id">
+    </div>
+
+    <button type="submit">
+      Create bookmark
+    </button>
+  </form>
+</article>
+
+<hr>
+
+<article>
+  <ul>
+    <% @list_of_bookmarks.each do |a_bookmark| %>
+      <li>
+        <a href="/bookmarks/<%= a_bookmark.id %>">
+          Bookmark #<%= a_bookmark.id %>
+        </a>
+      </li>
+    <% end %>
+  </ul>
+</article>
+
+<hr>
