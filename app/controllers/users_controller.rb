@@ -5,8 +5,7 @@ class UsersController < ApplicationController
 
   # GET /users/:id
   def show
-    @listings = @user.listings
-    @bookmarks = @user.bookmarks.includes(:listing)
+    @bookmarks = @user.bookmarks.includes(:listing).order(created_at: :desc)
   end
 
   # GET /users/:id/edit
@@ -16,7 +15,7 @@ class UsersController < ApplicationController
   # PATCH/PUT /users/:id
   def update
     if @user.update(user_params)
-      redirect_to @user, notice: "Profile updated successfully."
+      redirect_to @user, notice: 'Profile updated successfully.'
     else
       render :edit, status: :unprocessable_entity
     end
@@ -35,6 +34,7 @@ class UsersController < ApplicationController
   end
 
   def user_params
-    params.require(:user).permit(:name, :email, :bio, :avatar)
+    params.require(:user).permit(:email)
+    # Add whatever attributes you want users to be able to update
   end
 end
