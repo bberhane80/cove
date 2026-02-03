@@ -1,58 +1,40 @@
 class UsersController < ApplicationController
-  def index
-    matching_users = User.all
+  before_action :authenticate_user!
+  before_action :set_user, only: [:show, :edit, :update]
+  before_action :authorize_user, only: [:edit, :update]
 
-    @list_of_users = matching_users.order({ :created_at => :desc })
-
-    render({ :template => "user_templates/index" })
-  end
-
+  # GET /users/:id
   def show
-    the_id = params.fetch("path_id")
-
-    matching_users = User.where({ :id => the_id })
-
-    @the_user = matching_users.at(0)
-
-    render({ :template => "user_templates/show" })
+    @listings = @user.listings
+    @bookmarks = @user.bookmarks.includes(:listing)
   end
 
-  def create
-    the_user = User.new
-    the_user.email = params.fetch("query_email")
-    the_user.username = params.fetch("query_username")
-    the_user.password = params.fetch("query_password")
-
-    if the_user.valid?
-      the_user.save
-      redirect_to("/users", { :notice => "User created successfully." })
-    else
-      redirect_to("/users", { :alert => the_user.errors.full_messages.to_sentence })
-    end
+  # GET /users/:id/edit
+  def edit
   end
 
+  # PATCH/PUT /users/:id
   def update
-    the_id = params.fetch("path_id")
-    the_user = User.where({ :id => the_id }).at(0)
-
-    the_user.email = params.fetch("query_email")
-    the_user.username = params.fetch("query_username")
-    the_user.password = params.fetch("query_password")
-
-    if the_user.valid?
-      the_user.save
-      redirect_to("/users/#{the_user.id}", { :notice => "User updated successfully." } )
+    if @user.update(user_params)
+      redirect_to @user, notice: "Profile updated successfully."
     else
-      redirect_to("/users/#{the_user.id}", { :alert => the_user.errors.full_messages.to_sentence })
+      render :edit, status: :unprocessable_entity
     end
   end
 
-  def destroy
-    the_id = params.fetch("path_id")
-    the_user = User.where({ :id => the_id }).at(0)
+  private
 
-    the_user.destroy
+  def set_user
+    @user = User.find(params[:id])
+  end
 
-    redirect_to("/users", { :notice => "User deleted successfully." } )
+  def authorize_user
+    unless @user == current_user
+      redirect_to root_path, alert: 'You are not authorized to perform this action.'
+    end
+  end
+
+  def user_params
+    params.require(:user).permit(:name, :email, :bio, :avatar)
   end
 end
