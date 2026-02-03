@@ -34,7 +34,6 @@ class UsersController < ApplicationController
   end
 
   def user_params
-    params.require(:user).permit(:email)
-    # Add whatever attributes you want users to be able to update
+  params.require(:user).permit(:email, :name, :bio)
   end
 end
