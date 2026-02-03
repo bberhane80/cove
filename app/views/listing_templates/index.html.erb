@@ -1,0 +1,83 @@
+<h1>
+  List of all listings
+</h1>
+
+<hr>
+
+<article>
+  <header>
+    <h2>
+      Add a new listing
+    </h2>
+  </header>
+
+  <form action="/insert_listing" method="post">
+    <div>
+      <label for="user_id_box">
+        User
+      </label>
+
+      <input type="text" id="user_id_box" name="query_user_id">
+    </div>
+
+    <div>
+      <label for="address_box">
+        Address
+      </label>
+
+      <input type="text" id="address_box" name="query_address">
+    </div>
+
+    <div>
+      <label for="details_box">
+        Details
+      </label>
+
+      <input type="text" id="details_box" name="query_details">
+    </div>
+
+    <div>
+      <label for="neighborhood_box">
+        Neighborhood
+      </label>
+
+      <input type="text" id="neighborhood_box" name="query_neighborhood">
+    </div>
+
+    <div>
+      <label for="city_box">
+        City
+      </label>
+
+      <input type="text" id="city_box" name="query_city">
+    </div>
+
+    <div>
+      <label for="state_box">
+        State
+      </label>
+
+      <input type="text" id="state_box" name="query_state">
+    </div>
+
+    <button type="submit">
+      Create listing
+    </button>
+  </form>
+</article>
+
+<hr>
+
+<article>
+  <ul>
+    <% @list_of_listings.each do |a_listing| %>
+      <li>
+        <a href="/listings/<%= a_listing.id %>">
+          Listing #<%= a_listing.id %>
+        </a>
+      </li>
+    <% end %>
+  </ul>
+</article>
+
+<hr>
