@@ -1,57 +1,29 @@
 class BookmarksController < ApplicationController
   before_action :authenticate_user!
-  def index
-    matching_bookmarks = Bookmark.all
 
-    @list_of_bookmarks = matching_bookmarks.order({ :created_at => :desc })
-
-    render({ :template => "bookmark_templates/index" })
-  end
-
-  def show
-    the_id = params.fetch("path_id")
-
-    matching_bookmarks = Bookmark.where({ :id => the_id })
-
-    @the_bookmark = matching_bookmarks.at(0)
-
-    render({ :template => "bookmark_templates/show" })
-  end
-
+  # POST /bookmarks
   def create
-    the_bookmark = Bookmark.new
-    the_bookmark.user_id = params.fetch("query_user_id")
-    the_bookmark.listing_id = params.fetch("query_listing_id")
-
-    if the_bookmark.valid?
-      the_bookmark.save
-      redirect_to("/bookmarks", { :notice => "Bookmark created successfully." })
+    @listing = Listing.find(params[:listing_id])
+    @bookmark = current_user.bookmarks.build(listing: @listing)
+    
+    if @bookmark.save
+      redirect_to @listing, notice: 'Listing bookmarked!'
     else
-      redirect_to("/bookmarks", { :alert => the_bookmark.errors.full_messages.to_sentence })
+      redirect_to @listing, alert: 'Could not bookmark listing.'
     end
   end
 
-  def update
-    the_id = params.fetch("path_id")
-    the_bookmark = Bookmark.where({ :id => the_id }).at(0)
-
-    the_bookmark.user_id = params.fetch("query_user_id")
-    the_bookmark.listing_id = params.fetch("query_listing_id")
-
-    if the_bookmark.valid?
-      the_bookmark.save
-      redirect_to("/bookmarks/#{the_bookmark.id}", { :notice => "Bookmark updated successfully." } )
-    else
-      redirect_to("/bookmarks/#{the_bookmark.id}", { :alert => the_bookmark.errors.full_messages.to_sentence })
-    end
-  end
-
+  # DELETE /bookmarks/:id
   def destroy
-    the_id = params.fetch("path_id")
-    the_bookmark = Bookmark.where({ :id => the_id }).at(0)
+    @bookmark = current_user.bookmarks.find(params[:id])
+    @listing = @bookmark.listing
+    @bookmark.destroy
+    
+    redirect_to @listing, notice: 'Bookmark removed.'
+  end
 
-    the_bookmark.destroy
-
-    redirect_to("/bookmarks", { :notice => "Bookmark deleted successfully." } )
+  # GET /bookmarks
+  def index
+    @bookmarks = current_user.bookmarks.includes(:listing).order(created_at: :desc)
   end
 end
