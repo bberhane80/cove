@@ -24,4 +24,7 @@ class User < ApplicationRecord
 
   has_many :bookmarks, dependent: :destroy
   has_many :bookmarked_listings, through: :bookmarks, source: :listing
+
+  validates :username, presence: true, uniqueness: true, length: { minimum: 3, maximum: 20 }
+  validates :username, format: { with: /\A[a-zA-Z0-9_]+\z/, message: "can only contain letters, numbers, and underscores" }
 end
