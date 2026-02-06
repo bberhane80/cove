@@ -2,16 +2,17 @@
 #
 # Table name: users
 #
-#  id                     :bigint           not null, primary key
-#  email                  :string
-#  encrypted_password     :string           default(""), not null
-#  password               :string
-#  remember_created_at    :datetime
-#  reset_password_sent_at :datetime
-#  reset_password_token   :string
-#  username               :string
-#  created_at             :datetime         not null
-#  updated_at             :datetime         not null
+#  id                      :bigint           not null, primary key
+#  email                   :string
+#  encrypted_password      :string           default(""), not null
+#  password                :string
+#  receive_recommendations :boolean
+#  remember_created_at     :datetime
+#  reset_password_sent_at  :datetime
+#  reset_password_token    :string
+#  username                :string
+#  created_at              :datetime         not null
+#  updated_at              :datetime         not null
 #
 # Indexes
 #
