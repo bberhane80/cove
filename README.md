@@ -39,63 +39,6 @@ Cove is a modern, full-stack apartment rental platform that helps users discover
 - Git / GitHub
 - Dotenv (Environment variable management)
 
-## 📋 Prerequisites
-
-Before you begin, ensure you have the following installed:
-- Ruby 3.0 or higher
-- Rails 7.0 or higher
-- PostgreSQL 12 or higher
-- Node.js and Yarn
-- Git
-
-## 🚀 Getting Started
-
-### 1. Clone the Repository
-```bash
-git clone https://github.com/yourusername/cove.git
-cd cove
-```
-
-### 2. Install Dependencies
-```bash
-bundle install
-yarn install
-```
-
-### 3. Set Up Environment Variables
-
-Create a `.env` file in the root directory:
-```bash
-# .env
-ANTHROPIC_API_KEY=your_anthropic_api_key_here
-```
-
-**Get your Anthropic API key:**
-1. Sign up at https://console.anthropic.com
-2. Navigate to API Keys
-3. Create a new key
-4. Copy and paste it into your `.env` file
-
-### 4. Set Up the Database
-```bash
-rails db:create
-rails db:migrate
-rails db:seed
-```
-
-This will create sample listings and test users:
-- **Email:** test@example.com | **Password:** password123
-- **Email:** demo@example.com | **Password:** password123
-
-### 5. Start the Server
-```bash
-rails server
-```
-
-Visit `http://localhost:3000` in your browser.
-
-## 📚 Usage
-
 ### For Users
 
 **Sign Up / Log In**
@@ -113,29 +56,6 @@ Visit `http://localhost:3000` in your browser.
 2. Enable email recommendations in your profile settings
 3. Receive weekly personalized suggestions based on your preferences
 
-### For Developers
-
-**Run Tests**
-```bash
-rails test
-```
-
-**Access Rails Console**
-```bash
-rails console
-```
-
-**Send Test Recommendation Email**
-```ruby
-# In Rails console
-user = User.first
-RecommendationMailer.weekly_recommendations(user).deliver_now
-```
-
-**Manually Trigger Weekly Recommendations**
-```bash
-rails recommendations:send_weekly
-```
 
 ## 🗂️ Project Structure
 ```
