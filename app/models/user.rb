@@ -3,8 +3,10 @@
 # Table name: users
 #
 #  id                      :bigint           not null, primary key
+#  bio                     :text
 #  email                   :string
 #  encrypted_password      :string           default(""), not null
+#  name                    :string
 #  password                :string
 #  receive_recommendations :boolean
 #  remember_created_at     :datetime
@@ -26,6 +28,8 @@ class User < ApplicationRecord
   has_many :bookmarks, dependent: :destroy
   has_many :bookmarked_listings, through: :bookmarks, source: :listing
 
-  validates :username, presence: true, uniqueness: true, length: { minimum: 3, maximum: 20 }
-  validates :username, format: { with: /\A[a-zA-Z0-9_]+\z/, message: "can only contain letters, numbers, and underscores" }
+  validates :name, presence: true, length: { maximum: 100 }
+  validates :username, presence: true, uniqueness: true, length: { maximum: 50 }
+
+  validates :bio, length: { maximum: 500 }, allow_blank: true
 end

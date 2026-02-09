@@ -4,7 +4,7 @@ gem "anthropic", "~> 0.3.0"
 
 gem "sidekiq"
 
-gem 'whenever', require: false
+gem "whenever", require: false
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 8.0.2"
 # The modern asset pipeline for Rails [https://github.com/rails/propshaft]
@@ -67,7 +67,7 @@ gem "ai-chat", "~> 0.5.0"
 gem "appdev_support"
 gem "awesome_print"
 gem "devise"
-gem "dotenv"
+gem "dotenv-rails", groups: [ :development, :test, :production ]
 gem "carrierwave"
 gem "cloudinary"
 gem "faker"
