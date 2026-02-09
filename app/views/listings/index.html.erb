@@ -1,5 +1,33 @@
 <div class="listings-container">
-  <h1>Coves</h1>
+  <div class="search-header">
+    <h1>Find Your Cove</h1>
+    <p class="text-muted">Try searching: "2 bedroom in Chicago under $2000" or "pet friendly loft downtown"</p>
+    
+    <%= form_with url: listings_path, method: :get, class: "search-form" do |f| %>
+      <div class="input-group input-group-lg">
+        <%= f.text_field :q, 
+            class: "form-control search-input", 
+            placeholder: "What are you looking for? (e.g., 'affordable studio near transit')",
+            value: params[:q],
+            autocomplete: "off" %>
+        <button class="btn btn-primary search-btn" type="submit">
+          <i class="bi bi-search"></i> Smart Search
+        </button>
+      </div>
+    <% end %>
+    
+    <% if params[:q].present? %>
+      <div class="search-results-info">
+        <div class="alert alert-info d-flex align-items-center">
+          <i class="bi bi-lightbulb me-2"></i>
+          <div>
+            <strong>AI Search Results:</strong> <%= @search_explanation %>
+            <%= link_to "Clear search", listings_path, class: "ms-3 btn btn-sm btn-outline-secondary" %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
   
   <% if @listings.any? %>
     <div class="listings-grid">
@@ -13,7 +41,10 @@
           
           <div class="listing-details">
             <h3><%= listing.title %></h3>
-            <p class="address"><%= listing.address %></p>
+            <p class="address">
+              <i class="bi bi-geo-alt"></i>
+              <%= listing.address %>, <%= listing.city %>, <%= listing.state %>
+            </p>
             
             <div class="listing-info">
               <span class="price"><%= number_to_currency(listing.price) %>/month</span>
@@ -42,11 +73,58 @@
       <% end %>
     </div>
   <% else %>
-    <p>No listings available at the moment.</p>
+    <div class="empty-state">
+      <i class="bi bi-search" style="font-size: 4rem; color: #ccc;"></i>
+      <p>No listings found matching your search.</p>
+      <p class="text-muted">Try adjusting your search terms or browse all listings.</p>
+      <%= link_to 'View All Listings', listings_path, class: 'btn btn-primary' %>
+    </div>
   <% end %>
 </div>
 
 <style>
+  .search-header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  
+  .search-header h1 {
+    margin-bottom: 10px;
+  }
+  
+  .search-form {
+    max-width: 800px;
+    margin: 30px auto;
+  }
+  
+  .search-input {
+    border-radius: 50px 0 0 50px;
+    padding: 15px 25px;
+    border: 2px solid #2d5016;
+  }
+  
+  .search-input:focus {
+    border-color: #2d5016;
+    box-shadow: 0 0 0 0.2rem rgba(45, 80, 22, 0.25);
+  }
+  
+  .search-btn {
+    border-radius: 0 50px 50px 0;
+    padding: 15px 30px;
+    background: linear-gradient(135deg, #6b8e23 0%, #556b2f 100%);
+    border: none;
+    font-weight: 600;
+  }
+  
+  .search-btn:hover {
+    background: linear-gradient(135deg, #7aa82c 0%, #6b8e23 100%);
+  }
+  
+  .search-results-info {
+    max-width: 800px;
+    margin: 20px auto;
+  }
+  
   .listings-container {
     max-width: 1200px;
     margin: 0 auto;
@@ -157,5 +235,15 @@
     background-color: #fef5e7;
     border: 1px solid #f9d71c;
     color: #744210;
+  }
+  
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+  }
+  
+  .empty-state p {
+    font-size: 1.1em;
+    margin: 10px 0;
   }
 </style>
