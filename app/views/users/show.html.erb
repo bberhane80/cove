@@ -7,9 +7,7 @@
     <p><strong>Name:</strong> <%= @user.name.present? ? @user.name : "Not provided" %></p>
     <p><strong>Username:</strong> <%= @user.username %></p>
     <p><strong>Bio:</strong> <%= @user.bio.present? ? @user.bio : "No bio available" %></p>
-
-    
-    
+ 
     <% if @user == current_user %>
       <%= link_to 'Edit Profile', edit_user_path(@user), class: 'btn btn-primary' %>
     <% end %>
