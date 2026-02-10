@@ -1,15 +1,8 @@
+<%= render 'shared/profile_stats_styles' %>
+
 <div class="profile-container">
-  <h1><%= @user.email %>'s Profile</h1>
   
-  <div class="profile-info">
-    <p><strong>Email:</strong> <%= @user.email %></p>
-    <p><strong>Member since:</strong> <%= @user.created_at.strftime("%B %d, %Y") %></p>
-    
-    <% if @user == current_user %>
-      <%= link_to 'Edit Profile', edit_user_path(@user), class: 'btn btn-primary' %>
-    <% end %>
-  </div>
-  
+  <%= render 'shared/profile_stats_display', user: @user %>
   <hr>
   
   <h2>My Bookmarked Listings (<%= @bookmarks.count %>)</h2>

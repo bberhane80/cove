@@ -1,0 +1,42 @@
+<div class="profile-info-compact">
+  <div class="compact-grid">
+    <div class="compact-item">
+      <i class="bi bi-at"></i>
+      <div>
+        <span class="compact-label">Username</span>
+        <span class="compact-value">@<%= user.username %></span>
+      </div>
+    </div>
+    
+    <div class="compact-item">
+      <i class="bi bi-envelope"></i>
+      <div>
+        <span class="compact-label">Email</span>
+        <span class="compact-value"><%= user.email %></span>
+      </div>
+    </div>
+    
+    <div class="compact-item">
+      <i class="bi bi-person"></i>
+      <div>
+        <span class="compact-label">Name</span>
+        <span class="compact-value"><%= user.name.presence || "Not set" %></span>
+      </div>
+    </div>
+    
+    <div class="compact-item">
+      <i class="bi bi-calendar-check"></i>
+      <div>
+        <span class="compact-label">Member Since</span>
+        <span class="compact-value"><%= user.created_at.strftime("%b %Y") %></span>
+      </div>
+    </div>
+  </div>
+  
+  <% if user.bio.present? %>
+    <div class="compact-bio">
+      <i class="bi bi-chat-quote"></i>
+      <p><%= truncate(user.bio, length: 100) %></p>
+    </div>
+  <% end %>
+</div>
