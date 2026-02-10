@@ -1,0 +1,53 @@
+<div class="profile-info-card">
+  <h3 class="profile-section-title">
+    <i class="bi bi-person-circle"></i> Account Information
+  </h3>
+  
+  <div class="info-grid">
+    <div class="info-item">
+      <span class="info-label">
+        <i class="bi bi-at"></i> Username
+      </span>
+      <span class="info-value">@<%= user.username %></span>
+    </div>
+    
+    <div class="info-item">
+      <span class="info-label">
+        <i class="bi bi-envelope"></i> Email
+      </span>
+      <span class="info-value"><%= user.email %></span>
+    </div>
+    
+    <div class="info-item">
+      <span class="info-label">
+        <i class="bi bi-person"></i> Full Name
+      </span>
+      <span class="info-value">
+        <%= user.name.present? ? user.name : "<span class='text-muted'>Not provided</span>".html_safe %>
+      </span>
+    </div>
+    
+    <div class="info-item">
+      <span class="info-label">
+        <i class="bi bi-calendar-check"></i> Member Since
+      </span>
+      <span class="info-value"><%= user.created_at.strftime("%B %d, %Y") %></span>
+    </div>
+  </div>
+  
+  <% if user.bio.present? %>
+    <div class="bio-section">
+      <span class="info-label">
+        <i class="bi bi-chat-quote"></i> Bio
+      </span>
+      <p class="bio-text"><%= user.bio %></p>
+    </div>
+  <% else %>
+    <div class="bio-section">
+      <span class="info-label">
+        <i class="bi bi-chat-quote"></i> Bio
+      </span>
+      <p class="bio-text text-muted">No bio available</p>
+    </div>
+  <% end %>
+</div>
