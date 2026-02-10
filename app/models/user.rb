@@ -25,10 +25,17 @@
 class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
-
   has_many :bookmarks, dependent: :destroy
   has_many :bookmarked_listings, through: :bookmarks, source: :listing
 
   validates :username, presence: true, uniqueness: true, length: { minimum: 3, maximum: 20 }
   validates :username, format: { with: /\A[a-zA-Z0-9_]+\z/, message: "can only contain letters, numbers, and underscores" }
+
+  EMAIL_FREQUENCIES = {
+    "daily" => "Daily",
+    "weekly" => "Weekly",
+    "biweekly" => "Every 2 weeks",
+    "monthly" => "Monthly"
+  }.freeze
+  validates :email_frequency, inclusion: { in: EMAIL_FREQUENCIES.keys }, allow_nil: true
 end
