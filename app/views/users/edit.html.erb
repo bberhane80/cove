@@ -3,8 +3,6 @@
 <div class="edit-profile-container">
   <h1>Settings</h1>
   
-  <%= render 'shared/profile_info_compact', user: @user %>
-
   <%= form_with(model: @user, local: true) do |f| %>
     <% if @user.errors.any? %>
       <div class="error-messages">
