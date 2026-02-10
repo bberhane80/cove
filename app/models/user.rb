@@ -3,8 +3,11 @@
 # Table name: users
 #
 #  id                      :bigint           not null, primary key
+#  bio                     :text
 #  email                   :string
+#  email_frequency         :string
 #  encrypted_password      :string           default(""), not null
+#  name                    :string
 #  password                :string
 #  receive_recommendations :boolean
 #  remember_created_at     :datetime
