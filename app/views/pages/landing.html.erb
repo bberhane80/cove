@@ -9,8 +9,8 @@
       </p>
       
       <div class="hero-cta">
-        <%= link_to new_user_registration_path, class: "btn btn-hero-primary" do %>
-          Get Started Free
+        <%= link_to listings_path, class: "btn btn-hero-primary" do %>
+          Browse Listings
           <i class="bi bi-arrow-right ms-2"></i>
         <% end %>
         <%= link_to about_path, class: "btn btn-hero-secondary" do %>
@@ -210,13 +210,11 @@
       <h2>Ready to Find Your Perfect Home?</h2>
       <p>Join Cove today and let us do the heavy lifting.</p>
       
-      <%= link_to new_user_registration_path, class: "btn btn-cta-large" do %>
+      <%= link_to listings_path, class: "btn btn-cta-large" do %>
         <i class="bi bi-house-heart-fill me-2"></i>
-        Get Started Free
+        Browse listings
         <i class="bi bi-arrow-right ms-2"></i>
       <% end %>
-      
-      <p class="cta-footnote">Already have an account? <%= link_to "Sign in", new_user_session_path %></p>
     </div>
   </section>
 </div>
