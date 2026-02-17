@@ -11,6 +11,8 @@ user1 = User.create!(
   email: 'test@example.com',
   password: 'password123',
   password_confirmation: 'password123',
+  full_name: 'Test User',
+  bio: 'Just a test user exploring listings in the Chicago area.',
   receive_recommendations: true,
   email_frequency: 'weekly'
 )
@@ -20,6 +22,8 @@ user2 = User.create!(
   email: 'demo@example.com',
   password: 'password123',
   password_confirmation: 'password123',
+  full_name: 'Demo User',
+  bio: 'Checking out the platform and browsing available properties.',
   receive_recommendations: true,
   email_frequency: 'weekly'
 )
@@ -29,7 +33,7 @@ user3 = User.create!(
   email: 'john@example.com',
   password: 'password123',
   password_confirmation: 'password123',
-  name: 'John Doe',
+  full_name: 'John Doe',
   bio: 'Software engineer looking for a cozy apartment in Chicago.',
   receive_recommendations: true,
   email_frequency: 'daily'
@@ -40,7 +44,7 @@ user4 = User.create!(
   email: 'jane@example.com',
   password: 'password123',
   password_confirmation: 'password123',
-  name: 'Jane Smith',
+  full_name: 'Jane Smith',
   bio: 'Love historic buildings and walkable neighborhoods!',
   receive_recommendations: false
 )
@@ -263,17 +267,21 @@ puts "\n🔐 Test User Logins:"
 puts "\n1. @testuser"
 puts "   Email: test@example.com"
 puts "   Password: password123"
+puts "   Name: Test User"
 puts "   Recommendations: Weekly"
 puts "\n2. @demouser"
 puts "   Email: demo@example.com"
 puts "   Password: password123"
+puts "   Name: Demo User"
 puts "   Recommendations: Weekly"
 puts "\n3. @johndoe"
 puts "   Email: john@example.com"
 puts "   Password: password123"
+puts "   Name: John Doe"
 puts "   Recommendations: Daily"
 puts "\n4. @janesmit"
 puts "   Email: jane@example.com"
 puts "   Password: password123"
+puts "   Name: Jane Smith"
 puts "   Recommendations: Disabled"
 puts "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
