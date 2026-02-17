@@ -7,15 +7,42 @@ User.destroy_all
 puts "Creating sample users..."
 # Create test users
 user1 = User.create!(
+  username: 'testuser',
   email: 'test@example.com',
   password: 'password123',
-  password_confirmation: 'password123'
+  password_confirmation: 'password123',
+  receive_recommendations: true,
+  email_frequency: 'weekly'
 )
 
 user2 = User.create!(
+  username: 'demouser',
   email: 'demo@example.com',
   password: 'password123',
-  password_confirmation: 'password123'
+  password_confirmation: 'password123',
+  receive_recommendations: true,
+  email_frequency: 'weekly'
+)
+
+user3 = User.create!(
+  username: 'johndoe',
+  email: 'john@example.com',
+  password: 'password123',
+  password_confirmation: 'password123',
+  name: 'John Doe',
+  bio: 'Software engineer looking for a cozy apartment in Chicago.',
+  receive_recommendations: true,
+  email_frequency: 'daily'
+)
+
+user4 = User.create!(
+  username: 'janesmit',
+  email: 'jane@example.com',
+  password: 'password123',
+  password_confirmation: 'password123',
+  name: 'Jane Smith',
+  bio: 'Love historic buildings and walkable neighborhoods!',
+  receive_recommendations: false
 )
 
 puts "Creating sample listings..."
@@ -208,11 +235,22 @@ listings_data.each do |listing_attrs|
   Listing.create!(listing_attrs)
 end
 
-# Create some sample bookmarks
+# Create some sample bookmarks with varied preferences
 puts "Creating sample bookmarks..."
-sample_listings = Listing.limit(5)
-sample_listings.each do |listing|
-  Bookmark.create!(user: user1, listing: listing)
+
+# User 1 prefers luxury properties
+[1, 6, 8].each do |listing_id|
+  Bookmark.create!(user: user1, listing: Listing.find(listing_id))
+end
+
+# User 3 prefers affordable options
+[2, 7, 13].each do |listing_id|
+  Bookmark.create!(user: user3, listing: Listing.find(listing_id))
+end
+
+# User 4 prefers historic charm
+[5, 9, 15].each do |listing_id|
+  Bookmark.create!(user: user4, listing: Listing.find(listing_id))
 end
 
 puts "✅ Seed data created successfully!"
@@ -222,8 +260,20 @@ puts "Created #{Listing.count} listing(s)"
 puts "Created #{Bookmark.count} bookmark(s)"
 puts "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 puts "\n🔐 Test User Logins:"
-puts "Email: test@example.com"
-puts "Password: password123"
-puts "\nEmail: demo@example.com"
-puts "Password: password123"
+puts "\n1. @testuser"
+puts "   Email: test@example.com"
+puts "   Password: password123"
+puts "   Recommendations: Weekly"
+puts "\n2. @demouser"
+puts "   Email: demo@example.com"
+puts "   Password: password123"
+puts "   Recommendations: Weekly"
+puts "\n3. @johndoe"
+puts "   Email: john@example.com"
+puts "   Password: password123"
+puts "   Recommendations: Daily"
+puts "\n4. @janesmit"
+puts "   Email: jane@example.com"
+puts "   Password: password123"
+puts "   Recommendations: Disabled"
 puts "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
