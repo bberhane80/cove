@@ -1,12 +1,24 @@
 class RecommendationMailer < ApplicationMailer
-  default from: 'recommendations@rentalhub.com'
+  layout false
+  default from: 'recommendations@cove.com'
 
   def weekly_recommendations(user)
     @user = user
     
+    # Check if API key exists
+    unless ENV['ANTHROPIC_API_KEY'].present?
+      Rails.logger.error("Cannot send recommendations: ANTHROPIC_API_KEY not configured")
+      return
+    end
+    
     # Generate AI recommendations
-    service = AiRecommendationService.new(user)
-    result = service.generate_recommendations
+    begin
+      service = AiRecommendationService.new(user)
+      result = service.generate_recommendations
+    rescue => e
+      Rails.logger.error("Failed to generate recommendations for #{user.email}: #{e.message}")
+      return
+    end
     
     return unless result && result[:success] && result[:recommendations].any?
     
@@ -15,7 +27,8 @@ class RecommendationMailer < ApplicationMailer
     
     mail(
       to: @user.email,
-      subject: "#{@user.username}, we found #{@recommendations.count} listings you might love! 🏡"
+      subject: "#{@user.username}, Cove found #{@recommendations.count} listings you might love! 🏡",
+      content_type: 'text/plain'  # Add this to only send text
     )
   end
 end
