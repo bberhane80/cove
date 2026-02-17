@@ -28,8 +28,22 @@ class User < ApplicationRecord
   has_many :bookmarks, dependent: :destroy
   has_many :bookmarked_listings, through: :bookmarks, source: :listing
 
-  validates :username, presence: true, uniqueness: true, length: { minimum: 3, maximum: 20 }
-  validates :username, format: { with: /\A[a-zA-Z0-9_]+\z/, message: "can only contain letters, numbers, and underscores" }
+  validates :username, presence: true,
+                       uniqueness: { case_sensitive: false },
+                       length: { minimum: 3, maximum: 20 },
+                       format: { with: /\A[a-zA-Z0-9_]+\z/, message: "can only contain letters, numbers, and underscores" }
+
+  validates :email, presence: true,
+                    uniqueness: { case_sensitive: false },
+                    format: { with: URI::MailTo::EMAIL_REGEXP, message: "must be a valid email address" }
+
+  validates :password, length: { minimum: 6, maximum: 128 }, allow_blank: true
+
+  validates :full_name, length: { maximum: 100 },
+                        format: { with: /\A[a-zA-Z\s\-']+\z/, message: "can only contain letters, spaces, hyphens, and apostrophes" },
+                        allow_blank: true
+
+  validates :bio, length: { maximum: 500 }, allow_blank: true
 
   EMAIL_FREQUENCIES = {
     "daily" => "Daily",
