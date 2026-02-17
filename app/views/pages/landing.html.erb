@@ -2,20 +2,24 @@
   <!-- Hero Section -->
   <section class="hero-section">
     <div class="hero-content">
-      <h1 class="hero-title">Find Your Perfect Home</h1>
+      <h1 class="hero-title">Find Your Perfect Home with AI</h1>
       <p class="hero-subtitle">
         Stop scrolling through endless listings. Let Cove's intelligent recommendations 
         find properties that match your unique style, budget, and lifestyle.
       </p>
       
       <div class="hero-cta">
-        <%= link_to listings_path, class: "btn btn-hero-primary" do %>
-          Browse Listings
+        <%= link_to new_user_registration_path, class: "btn btn-hero-primary" do %>
+          Get Started Free
           <i class="bi bi-arrow-right ms-2"></i>
         <% end %>
         <%= link_to about_path, class: "btn btn-hero-secondary" do %>
           Learn More
         <% end %>
+      </div>
+      
+      <p class="hero-trust">Join the Cove community today!</p>
+    </div>
     
     <div class="hero-visual">
       <div class="hero-card card-1">
@@ -204,11 +208,11 @@
   <section class="final-cta-section">
     <div class="cta-box">
       <h2>Ready to Find Your Perfect Home?</h2>
-      <p>Start browsing listings today and let AI do the heavy lifting.</p>
+      <p>Join Cove today and let us do the heavy lifting.</p>
       
-      <%= link_to listings_path, class: "btn btn-cta-large" do %>
+      <%= link_to new_user_registration_path, class: "btn btn-cta-large" do %>
         <i class="bi bi-house-heart-fill me-2"></i>
-        Browse Listings
+        Get Started Free
         <i class="bi bi-arrow-right ms-2"></i>
       <% end %>
       
@@ -216,8 +220,6 @@
     </div>
   </section>
 </div>
-
-<!-- Keep all the existing styles -->
 
 <style>
   .landing-page {
