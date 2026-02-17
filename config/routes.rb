@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   devise_for :users
   
-  root 'listings#index'
+  root 'pages#landing'
   
   resources :listings, only: [:index, :show]
   resources :bookmarks, only: [:create, :destroy, :index]
@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   
   # About page
   get 'about', to: 'pages#about'
+  get 'landing', to: 'pages#landing'
   
   # Health check
   get '/health', to: 'health#index'
