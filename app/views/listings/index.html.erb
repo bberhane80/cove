@@ -2,7 +2,7 @@
 
 <div class="listings-container">
   <div class="page-header">
-    <h1>Available Listings</h1>
+    <h1>Find your cove</h1>
     
     <!-- Filters (collapsible) -->
     <%= render 'filters' %>
@@ -40,61 +40,124 @@
         <% if params[:city].present? %>
           <span class="filter-tag">
             City: <%= params[:city] %>
-            <%= link_to listings_path(params.except(:city)), class: "remove-filter" do %>
-              <i class="bi bi-x"></i>
-            <% end %>
+            <%= link_to listings_path(
+  city: params[:city],
+  state: params[:state],
+  min_price: params[:min_price],
+  max_price: params[:max_price],
+  bedrooms: params[:bedrooms],
+  bathrooms: params[:bathrooms],
+  min_sqft: params[:min_sqft],
+  max_sqft: params[:max_sqft]
+), class: "remove-filter" do %>
+  <i class="bi bi-x"></i>
+<% end %>
           </span>
         <% end %>
         
         <% if params[:state].present? %>
           <span class="filter-tag">
             State: <%= params[:state] %>
-            <%= link_to listings_path(params.except(:state)), class: "remove-filter" do %>
-              <i class="bi bi-x"></i>
-            <% end %>
+            <%= link_to listings_path(
+  city: params[:city],
+  state: params[:state],
+  min_price: params[:min_price],
+  max_price: params[:max_price],
+  bedrooms: params[:bedrooms],
+  bathrooms: params[:bathrooms],
+  min_sqft: params[:min_sqft],
+  max_sqft: params[:max_sqft]
+), class: "remove-filter" do %>
+  <i class="bi bi-x"></i>
+<% end %>
           </span>
         <% end %>
         
         <% if params[:min_price].present? %>
           <span class="filter-tag">
             Min: <%= number_to_currency(params[:min_price]) %>
-            <%= link_to listings_path(params.except(:min_price)), class: "remove-filter" do %>
-              <i class="bi bi-x"></i>
-            <% end %>
+            <%= link_to listings_path(
+  city: params[:city],
+  state: params[:state],
+  min_price: params[:min_price],
+  max_price: params[:max_price],
+  bedrooms: params[:bedrooms],
+  bathrooms: params[:bathrooms],
+  min_sqft: params[:min_sqft],
+  max_sqft: params[:max_sqft]
+), class: "remove-filter" do %>
+  <i class="bi bi-x"></i>
+<% end %>
           </span>
         <% end %>
         
         <% if params[:max_price].present? %>
           <span class="filter-tag">
             Max: <%= number_to_currency(params[:max_price]) %>
-            <%= link_to listings_path(params.except(:max_price)), class: "remove-filter" do %>
-              <i class="bi bi-x"></i>
-            <% end %>
+            <%= link_to listings_path(
+  city: params[:city],
+  state: params[:state],
+  min_price: params[:min_price],
+  max_price: params[:max_price],
+  bedrooms: params[:bedrooms],
+  bathrooms: params[:bathrooms],
+  min_sqft: params[:min_sqft],
+  max_sqft: params[:max_sqft]
+), class: "remove-filter" do %>
+  <i class="bi bi-x"></i>
+<% end %>
           </span>
         <% end %>
         
         <% if params[:bedrooms].present? %>
           <span class="filter-tag">
             <%= params[:bedrooms].to_i == 0 ? 'Studio' : "#{params[:bedrooms]}+ beds" %>
-            <%= link_to listings_path(params.except(:bedrooms)), class: "remove-filter" do %>
-              <i class="bi bi-x"></i>
-            <% end %>
+            <%= link_to listings_path(
+  city: params[:city],
+  state: params[:state],
+  min_price: params[:min_price],
+  max_price: params[:max_price],
+  bedrooms: params[:bedrooms],
+  bathrooms: params[:bathrooms],
+  min_sqft: params[:min_sqft],
+  max_sqft: params[:max_sqft]
+), class: "remove-filter" do %>
+  <i class="bi bi-x"></i>
+<% end %>
           </span>
         <% end %>
         
         <% if params[:bathrooms].present? %>
           <span class="filter-tag">
             <%= params[:bathrooms] %>+ baths
-            <%= link_to listings_path(params.except(:bathrooms)), class: "remove-filter" do %>
-              <i class="bi bi-x"></i>
-            <% end %>
+            <%= link_to listings_path(
+  city: params[:city],
+  state: params[:state],
+  min_price: params[:min_price],
+  max_price: params[:max_price],
+  bedrooms: params[:bedrooms],
+  bathrooms: params[:bathrooms],
+  min_sqft: params[:min_sqft],
+  max_sqft: params[:max_sqft]
+), class: "remove-filter" do %>
+  <i class="bi bi-x"></i>
+<% end %>
           </span>
         <% end %>
         
         <% if params[:search].present? %>
           <span class="filter-tag">
             Search: "<%= params[:search] %>"
-            <%= link_to listings_path(params.to_unsafe_h.except(:search)), class: "remove-filter" do %>
+            <%= link_to listings_path(
+  city: params[:city],
+  state: params[:state],
+  min_price: params[:min_price],
+  max_price: params[:max_price],
+  bedrooms: params[:bedrooms],
+  bathrooms: params[:bathrooms],
+  min_sqft: params[:min_sqft],
+  max_sqft: params[:max_sqft]
+), class: "remove-filter" do %>
   <i class="bi bi-x"></i>
 <% end %>
           </span>
