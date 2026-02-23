@@ -18,17 +18,22 @@ class ListingsController < ApplicationController
     @listings = @listings.where("square_feet >= ?", params[:min_sqft]) if params[:min_sqft].present?
     @listings = @listings.where("square_feet <= ?", params[:max_sqft]) if params[:max_sqft].present?
     
-    # Apply search
+    # Apply natural language search using AI
     if params[:search].present?
-      search_term = "%#{params[:search]}%"
-      @listings = @listings.where(
-        "title ILIKE ? OR description ILIKE ? OR address ILIKE ? OR city ILIKE ?", 
-        search_term, search_term, search_term, search_term
-      )
+      ai_result = AiListingSearchService.new(params[:search]).search
+      if ai_result[:success]
+        @listings = ai_result[:listings]
+        @ai_explanation = ai_result[:explanation]
+      else
+        @listings = []
+        @ai_explanation = ai_result[:explanation]
+      end
     end
     
-    # Order results
-    @listings = @listings.order(created_at: :desc)
+    # Order results if @listings is a relation
+    if @listings.is_a?(ActiveRecord::Relation)
+      @listings = @listings.order(created_at: :desc)
+    end
     
     # Get unique values for filter dropdowns
     @cities = Listing.distinct.pluck(:city).compact.sort
