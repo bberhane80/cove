@@ -23,7 +23,15 @@ require 'rails_helper'
 
 describe Listing, type: :model do
   it 'is valid with valid attributes' do
-    listing = Listing.new(title: 'Test', description: 'Test desc', location: 'Test City', price: 100)
+    listing = Listing.new(
+      title: 'Test',
+      description: 'Test desc',
+      city: 'Boston',
+      state: 'MA',
+      price: 1000,
+      bedrooms: 2,
+      bathrooms: 1.0
+    )
     expect(listing).to be_valid
   end
 end
