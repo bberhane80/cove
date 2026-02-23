@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   devise_for :users
   
-  root 'pages#landing'
+  root "pages#landing"
   
   resources :listings, only: [:index, :show]
   resources :bookmarks, only: [:create, :destroy, :index]

@@ -11,7 +11,7 @@ user1 = User.create!(
   email: 'test@example.com',
   password: 'password123',
   password_confirmation: 'password123',
-  full_name: 'Test User',
+  name: 'Test User',
   bio: 'Just a test user exploring listings in the Chicago area.',
   receive_recommendations: true,
   email_frequency: 'weekly'
@@ -22,7 +22,7 @@ user2 = User.create!(
   email: 'demo@example.com',
   password: 'password123',
   password_confirmation: 'password123',
-  full_name: 'Demo User',
+  name: 'Demo User',
   bio: 'Checking out the platform and browsing available properties.',
   receive_recommendations: true,
   email_frequency: 'weekly'
@@ -33,7 +33,7 @@ user3 = User.create!(
   email: 'john@example.com',
   password: 'password123',
   password_confirmation: 'password123',
-  full_name: 'John Doe',
+  name: 'John Doe',
   bio: 'Software engineer looking for a cozy apartment in Chicago.',
   receive_recommendations: true,
   email_frequency: 'daily'
@@ -44,7 +44,7 @@ user4 = User.create!(
   email: 'jane@example.com',
   password: 'password123',
   password_confirmation: 'password123',
-  full_name: 'Jane Smith',
+  name: 'Jane Smith',
   bio: 'Love historic buildings and walkable neighborhoods!',
   receive_recommendations: false
 )

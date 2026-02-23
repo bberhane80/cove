@@ -39,7 +39,7 @@ class User < ApplicationRecord
 
   validates :password, length: { minimum: 6, maximum: 128 }, allow_blank: true
 
-  validates :full_name, length: { maximum: 100 },
+  validates :name, length: { maximum: 100 },
                         format: { with: /\A[a-zA-Z\s\-']+\z/, message: "can only contain letters, spaces, hyphens, and apostrophes" },
                         allow_blank: true
 
