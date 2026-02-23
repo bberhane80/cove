@@ -60,10 +60,7 @@ class User < ApplicationRecord
 
   validates :password, length: { minimum: 6, maximum: 128 }, allow_blank: true
 
-  validates :name, length: { maximum: 100 },
-                        format: { with: /\A[a-zA-Z\s\-']+\z/, message: "can only contain letters, spaces, hyphens, and apostrophes" },
-                        allow_blank: true
-
+  validates :name, length: { maximum: 100 }, allow_blank: true
   validates :bio, length: { maximum: 500 }, allow_blank: true
 
   EMAIL_FREQUENCIES = {
@@ -73,4 +70,12 @@ class User < ApplicationRecord
     "monthly" => "Monthly"
   }.freeze
   validates :email_frequency, inclusion: { in: EMAIL_FREQUENCIES.keys }, allow_nil: true
+
+    EMAIL_FREQUENCIES = {
+      "daily" => "Daily",
+      "weekly" => "Weekly",
+      "biweekly" => "Every 2 weeks",
+      "monthly" => "Monthly"
+    }.freeze
+    validates :email_frequency, inclusion: { in: EMAIL_FREQUENCIES.keys }, allow_nil: true
 end
