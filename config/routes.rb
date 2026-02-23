@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+
   devise_for :users
   
   root "pages#landing"
@@ -13,4 +14,12 @@ Rails.application.routes.draw do
   
   # Health check
   get '/health', to: 'health#index'
+  
+  # ...existing routes...
+  
+  namespace :api do
+    namespace :v1 do
+      get 'base/status', to: 'base#status'
+    end
+  end
 end

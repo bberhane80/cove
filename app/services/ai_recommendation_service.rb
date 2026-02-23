@@ -77,7 +77,7 @@ class AiRecommendationService
       #{JSON.pretty_generate(available)}
 
       YOUR TASK:
-      1. Analyze the user's preferences based on their bookmarked listings (price range, location, size, bedrooms, style)
+      1. Analyze the user's preferences based on their bookmarked listings (price range, location, size, bedrooms, style) and their bio if available.
       2. Find 3-5 listings from the available listings that match their preferences
       3. For each recommendation, explain WHY you think they'll like it based on their bookmarks
       4. Write in a friendly, personalized tone
