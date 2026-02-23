@@ -1,12 +1,241 @@
-/*
- * This is a manifest file that'll be compiled into application.css.
- *
- * With Propshaft, assets are served efficiently without preprocessing steps. You can still include
- * application-wide styles in this file, but keep in mind that CSS precedence will follow the standard
- * cascading order, meaning styles declared later in the document or manifest will override earlier ones,
- * depending on specificity.
- *
- * Consider organizing styles into separate files for maintainability.
- */
+/* Forest Green Navbar Styling */
+.navbar-modern {
+  background: linear-gradient(135deg, #2d5016 0%, #1b3409 100%);
+  backdrop-filter: blur(10px);
+  padding: 1rem 0;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 15px rgba(45, 80, 22, 0.3);
+}
 
-@import "custom-image.css";
+.navbar-modern .navbar-brand {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #ffffff !important;
+  display: flex;
+  align-items: center;
+  transition: transform 0.3s ease;
+}
+
+.navbar-modern .navbar-brand:hover {
+  transform: translateY(-2px);
+}
+
+.navbar-modern .brand-text {
+  background: linear-gradient(to right, #fff, #d4edda);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.navbar-modern .navbar-brand i {
+  color: #f4d03f;
+  font-size: 1.8rem;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+}
+
+/* Navigation Links */
+.navbar-modern .nav-link {
+  color: rgba(255, 255, 255, 0.95) !important;
+  font-weight: 500;
+  padding: 0.5rem 1rem !important;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+}
+
+.navbar-modern .nav-link:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #f4d03f !important;
+  transform: translateY(-1px);
+}
+
+.navbar-modern .nav-link i {
+  font-size: 1.1rem;
+}
+
+/* User Avatar */
+.user-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #6b8e23 0%, #556b2f 100%);
+  color: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.9rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  border: 2px solid rgba(244, 208, 63, 0.3);
+}
+
+.user-menu {
+  display: flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem !important;
+}
+
+/* Modern Dropdown */
+.modern-dropdown {
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(27, 52, 9, 0.25);
+  padding: 0.5rem 0;
+  margin-top: 0.5rem;
+  min-width: 240px;
+  background: #ffffff;
+}
+
+.modern-dropdown .dropdown-header {
+  padding: 0.75rem 1rem;
+  background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+  border-radius: 8px;
+  margin: 0.25rem 0.5rem;
+  color: #1b3409;
+}
+
+.modern-dropdown .dropdown-header .text-muted {
+  color: #4a6741 !important;
+}
+
+.modern-dropdown .dropdown-header .fw-semibold {
+  color: #1b3409;
+}
+
+.modern-dropdown .dropdown-item {
+  padding: 0.65rem 1.25rem;
+  transition: all 0.2s ease;
+  border-radius: 6px;
+  margin: 0.125rem 0.5rem;
+  font-weight: 500;
+  color: #374151;
+}
+
+.modern-dropdown .dropdown-item:hover {
+  background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+  transform: translateX(4px);
+  color: #1b3409;
+}
+
+.modern-dropdown .dropdown-item i {
+  opacity: 0.8;
+  color: #2d5016;
+}
+
+.modern-dropdown .dropdown-item.text-danger {
+  color: #dc2626 !important;
+}
+
+.modern-dropdown .dropdown-item.text-danger:hover {
+  background: #fee2e2;
+}
+
+.modern-dropdown .dropdown-item.text-danger i {
+  color: #dc2626;
+}
+
+.modern-dropdown .dropdown-divider {
+  margin: 0.5rem 0;
+  opacity: 0.15;
+  border-color: #2d5016;
+}
+
+/* Modern Button */
+.btn-modern {
+  background: linear-gradient(135deg, #6b8e23 0%, #556b2f 100%);
+  color: #ffffff !important;
+  border: none;
+  padding: 0.6rem 1.5rem;
+  border-radius: 50px;
+  font-weight: 600;
+  box-shadow: 0 4px 15px rgba(107, 142, 35, 0.4);
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+}
+
+.btn-modern:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(107, 142, 35, 0.5);
+  background: linear-gradient(135deg, #7aa82c 0%, #6b8e23 100%);
+}
+
+.btn-modern i {
+  transition: transform 0.3s ease;
+}
+
+.btn-modern:hover i {
+  transform: translateX(3px);
+}
+
+/* Navbar Toggler */
+.navbar-modern .navbar-toggler {
+  color: rgba(255, 255, 255, 0.9);
+  padding: 0.5rem;
+  border-color: rgba(244, 208, 63, 0.4);
+}
+
+.navbar-modern .navbar-toggler:focus {
+  box-shadow: none;
+  outline: 2px solid rgba(244, 208, 63, 0.5);
+}
+
+.navbar-modern .navbar-toggler-icon {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.95%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+/* Responsive adjustments */
+@media (max-width: 991px) {
+  .navbar-modern .navbar-nav {
+    padding: 1rem 0;
+  }
+  
+  .navbar-modern .nav-link {
+    margin: 0.25rem 0;
+  }
+  
+  .btn-modern {
+    margin-top: 0.5rem;
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* Smooth scroll behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Add some spacing below navbar */
+body {
+  padding-top: 76px;
+  background: linear-gradient(to bottom, #f8faf8 0%, #ffffff 100%);
+  min-height: 100vh;
+}
+
+.navbar-modern {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1030;
+}
+
+/* Optional: Add subtle texture to navbar */
+.navbar-modern::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  opacity: 0.1;
+  pointer-events: none;
+}
+
+.navbar-modern .container {
+  position: relative;
+  z-index: 1;
+}

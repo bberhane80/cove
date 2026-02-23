@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_02_03_215725) do
+ActiveRecord::Schema[8.0].define(version: 2026_02_04_024248) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -30,6 +30,13 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_03_215725) do
     t.string "state"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "title"
+    t.text "description"
+    t.decimal "price", precision: 10, scale: 2
+    t.integer "bedrooms"
+    t.decimal "bathrooms", precision: 3, scale: 1
+    t.integer "square_feet"
+    t.string "image_url"
   end
 
   create_table "solid_cable_messages", force: :cascade do |t|
