@@ -108,8 +108,7 @@ class AiRecommendationService
       # Parse the JSON
       result = JSON.parse(content)
       
-      # Get the listing IDs
-      listing_ids = result["recommendations"].map { |r| r["listing_id"] }
+      # Get the listing IDs (removed unused variable)
       
       # Fetch the actual listings and build recommendations
       recommendations = result["recommendations"].map do |rec|
