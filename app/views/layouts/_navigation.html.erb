@@ -1,0 +1,19 @@
+<%= link_to root_path, class: "nav-link" do %>
+  <span>Home</span>
+<% end %>
+
+<%= link_to listings_path, class: "nav-link" do %>
+  <span>Browse Listings</span>
+<% end %>
+
+<%= link_to bookmarks_path, class: "nav-link" do %>
+  <span>My Bookmarks</span>
+<% end %>
+
+<%= link_to user_path(current_user), class: "nav-link" do %>
+  <span>My Profile</span>
+<% end %>
+
+<%= link_to destroy_user_session_path, method: :delete, class: "nav-link" do %>
+  <span>Sign Out</span>
+<% end %>
