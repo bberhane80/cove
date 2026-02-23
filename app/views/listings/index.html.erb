@@ -94,9 +94,9 @@
         <% if params[:search].present? %>
           <span class="filter-tag">
             Search: "<%= params[:search] %>"
-            <%= link_to listings_path(params.to_unsafe_h.except(:search)), class: "remove-filter" do %>
-  <i class="bi bi-x"></i>
-<% end %>
+            <%= link_to listings_path(params.permit(:city, :state, :min_price, :max_price, :bedrooms, :bathrooms, :min_sqft, :max_sqft, :search).to_h.except(:search)), class: "remove-filter" do %>
+              <i class="bi bi-x"></i>
+            <% end %>
           </span>
         <% end %>
         
@@ -106,8 +106,9 @@
     
     <!-- Results Count -->
     <div class="results-summary">
+      <% listings_count = @listings.size %>
       <p>
-        <strong><%= @listings.count %></strong> <%= 'listing'.pluralize(@listings.count) %> found
+        <strong><%= listings_count %></strong> <%= 'listing'.pluralize(listings_count) %> found
       </p>
     </div>
   </div>

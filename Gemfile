@@ -67,7 +67,7 @@ gem "ai-chat", "~> 0.5.0"
 gem "appdev_support"
 gem "awesome_print"
 gem "devise"
-gem "dotenv-rails", groups: [ :development, :test, :production ]
+gem "dotenv-rails", groups: [ :development, :test ]
 gem "carrierwave"
 gem "cloudinary"
 gem "faker"

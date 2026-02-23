@@ -23,7 +23,11 @@
         <i class="bi bi-person"></i> Full Name
       </span>
       <span class="info-value">
-        <%= user.name.present? ? user.name : "<span class='text-muted'>Not provided</span>".html_safe %>
+        <% if user.name.present? %>
+          <%= user.name %>
+        <% else %>
+          <span class="text-muted">Not provided</span>
+        <% end %>
       </span>
     </div>
     

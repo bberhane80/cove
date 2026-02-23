@@ -64,7 +64,7 @@ class AiListingSearchService
       
       Your task:
       1. Understand what the user is looking for (location, price range, number of bedrooms, amenities, etc.)
-      2. Return ONLY a JSON array of listing IDs that match their criteria, ordered by relevance (best matches first)
+      2. Return a JSON object with matching listing IDs, ordered by relevance (best matches first)
       3. If the user's query is vague, include listings that might be a good fit
       
       Return ONLY valid JSON in this exact format (no additional text):
@@ -85,7 +85,16 @@ class AiListingSearchService
     begin
       # Extract the text content from Claude's response
       content = response.dig("content", 0, "text")
-      
+
+      if content.blank?
+        Rails.logger.error("AI response content is blank or missing")
+        return {
+          listings: [],
+          explanation: "Sorry, I couldn't process that search. Please try again.",
+          success: false
+        }
+      end
+
       # Remove markdown code blocks if present
       content = content.gsub(/```json\n?/, '').gsub(/```\n?/, '').strip
       
@@ -95,7 +104,16 @@ class AiListingSearchService
       # Get the listing IDs
       listing_ids = result["listing_ids"]
       explanation = result["explanation"]
-      
+
+      unless listing_ids.is_a?(Array)
+        Rails.logger.error("AI response missing listing_ids array")
+        return {
+          listings: [],
+          explanation: "Sorry, I couldn't process that search. Please try again.",
+          success: false
+        }
+      end
+
       # Fetch the actual listings in the order specified by Claude
       ordered_listings = listing_ids.map do |id|
         all_listings.find { |l| l.id == id }

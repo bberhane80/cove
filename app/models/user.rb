@@ -28,7 +28,7 @@ class User < ApplicationRecord
   has_many :bookmarks, dependent: :destroy
   has_many :bookmarked_listings, through: :bookmarks, source: :listing
 
-  validates :name, presence: true, length: { maximum: 100 }
+  validates :name, length: { maximum: 100 }, allow_blank: true
   validates :username, presence: true, uniqueness: true, length: { maximum: 50 }
 
   validates :bio, length: { maximum: 500 }, allow_blank: true
