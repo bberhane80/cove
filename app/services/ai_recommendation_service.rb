@@ -1,22 +1,22 @@
 class AiRecommendationService
   def initialize(user)
     @user = user
-
-    api_key = ENV["ANTHROPIC_API_KEY"]
-
+    # Load .env if not already loaded
+    require 'dotenv/load' unless ENV['ANTHROPIC_API_KEY'].present?
+    # Get API key from environment
+    api_key = ENV['ANTHROPIC_API_KEY']
     if api_key.blank?
       Rails.logger.error("ANTHROPIC_API_KEY not found in environment variables")
       raise "Anthropic API key not configured"
     end
-
     @client = Anthropic::Client.new(access_token: api_key)
   end
 
   def generate_recommendations
-    bookmarked_listings = @user.bookmarked_listings.includes(:listing)
+    bookmarked_listings = @user.bookmarked_listings
     all_listings = Listing.where.not(id: bookmarked_listings.pluck(:id))
 
-    return nil if bookmarked_listings.empty? || all_listings.empty?
+    return { recommendations: [], summary: nil, success: false } if bookmarked_listings.empty? || all_listings.empty?
 
     # Prepare data for Claude
     bookmarked_data = prepare_listing_data(bookmarked_listings)
@@ -38,6 +38,10 @@ class AiRecommendationService
 
     # Parse response
     parse_recommendations(response, all_listings)
+  rescue => e
+    Rails.logger.error("AI Recommendation Error: #{e.message}")
+    Rails.logger.error(e.backtrace.join("\n"))
+    { recommendations: [], summary: "Unable to generate recommendations at this time.", success: false }
   end
 
   private
@@ -93,10 +97,17 @@ class AiRecommendationService
   def parse_recommendations(response, all_listings)
     begin
       content = response.dig("content", 0, "text")
+      
+      # Remove markdown code blocks if present
       content = content.gsub(/```json\n?/, '').gsub(/```\n?/, '').strip
       
+      # Parse the JSON
       result = JSON.parse(content)
       
+      # Get the listing IDs
+      listing_ids = result["recommendations"].map { |r| r["listing_id"] }
+      
+      # Fetch the actual listings and build recommendations
       recommendations = result["recommendations"].map do |rec|
         listing = all_listings.find { |l| l.id == rec["listing_id"] }
         next unless listing
@@ -113,11 +124,19 @@ class AiRecommendationService
         summary: result["summary"],
         success: true
       }
-    rescue => e
-      Rails.logger.error("Failed to parse AI recommendations: #{e.message}")
+    rescue JSON::ParserError => e
+      Rails.logger.error("Failed to parse AI response: #{e.message}")
+      Rails.logger.error("Response content: #{content}")
       {
         recommendations: [],
-        summary: nil,
+        summary: "Unable to parse AI recommendations.",
+        success: false
+      }
+    rescue => e
+      Rails.logger.error("Unexpected error parsing recommendations: #{e.message}")
+      {
+        recommendations: [],
+        summary: "An error occurred while processing recommendations.",
         success: false
       }
     end

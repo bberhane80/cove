@@ -5,6 +5,7 @@
 #  id                      :bigint           not null, primary key
 #  bio                     :text
 #  email                   :string
+#  email_frequency         :string
 #  encrypted_password      :string           default(""), not null
 #  name                    :string
 #  password                :string
@@ -24,12 +25,19 @@
 class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
-
   has_many :bookmarks, dependent: :destroy
   has_many :bookmarked_listings, through: :bookmarks, source: :listing
 
-  validates :name, length: { maximum: 100 }, allow_blank: true
-  validates :username, presence: true, uniqueness: true, length: { maximum: 50 }
+    validates :name, length: { maximum: 100 }, allow_blank: true
+    validates :bio, length: { maximum: 500 }, allow_blank: true
+    validates :username, presence: true, uniqueness: true, length: { minimum: 3, maximum: 20 }
+    validates :username, format: { with: /\A[a-zA-Z0-9_]+\z/, message: "can only contain letters, numbers, and underscores" }
 
-  validates :bio, length: { maximum: 500 }, allow_blank: true
+    EMAIL_FREQUENCIES = {
+      "daily" => "Daily",
+      "weekly" => "Weekly",
+      "biweekly" => "Every 2 weeks",
+      "monthly" => "Monthly"
+    }.freeze
+    validates :email_frequency, inclusion: { in: EMAIL_FREQUENCIES.keys }, allow_nil: true
 end

@@ -56,36 +56,35 @@ class AiListingSearchService
   def build_prompt(listings_data)
     <<~PROMPT
       You are a real estate search assistant. A user is searching for rental listings with this query:
+      <<~PROMPT
+        You are a real estate search assistant. A user is searching for rental listings with this query:
       
-      "#{@query}"
+        "#{@query}"
+        Here are all available listings:
+        #{JSON.pretty_generate(listings_data)}
       
-      Here are all available listings:
-      #{JSON.pretty_generate(listings_data)}
+        Your task:
+        1. Understand what the user is looking for (location, price range, number of bedrooms, amenities, etc.)
+        2. Return ONLY a JSON array of listing IDs that match their criteria, ordered by relevance (best matches first)
+        3. If the user's query is vague, include listings that might be a good fit
       
-      Your task:
-      1. Understand what the user is looking for (location, price range, number of bedrooms, amenities, etc.)
-      2. Return a JSON object with matching listing IDs, ordered by relevance (best matches first)
-      3. If the user's query is vague, include listings that might be a good fit
+        Return ONLY valid JSON in this exact format (no additional text):
+        {
+          "listing_ids": [1, 5, 3],
+          "explanation": "Found 3 listings matching your criteria for 2-bedroom apartments in Chicago under $2000/month"
+        }
       
-      Return ONLY valid JSON in this exact format (no additional text):
-      {
-        "listing_ids": [1, 5, 3],
-        "explanation": "Found 3 listings matching your criteria for 2-bedroom apartments in Chicago under $2000/month"
-      }
-      
-      If no listings match, return:
-      {
-        "listing_ids": [],
-        "explanation": "No listings found matching your criteria. Try adjusting your search."
-      }
-    PROMPT
-  end
+        If no listings match, return:
+        {
+          "listing_ids": [],
+          "explanation": "No listings found matching your criteria. Try adjusting your search."
+        }
+      PROMPT
 
   def parse_response(response, all_listings)
     begin
       # Extract the text content from Claude's response
       content = response.dig("content", 0, "text")
-
       if content.blank?
         Rails.logger.error("AI response content is blank or missing")
         return {
@@ -94,17 +93,13 @@ class AiListingSearchService
           success: false
         }
       end
-
       # Remove markdown code blocks if present
       content = content.gsub(/```json\n?/, '').gsub(/```\n?/, '').strip
-      
       # Parse the JSON
       result = JSON.parse(content)
-      
       # Get the listing IDs
       listing_ids = result["listing_ids"]
       explanation = result["explanation"]
-
       unless listing_ids.is_a?(Array)
         Rails.logger.error("AI response missing listing_ids array")
         return {
@@ -113,12 +108,10 @@ class AiListingSearchService
           success: false
         }
       end
-
       # Fetch the actual listings in the order specified by Claude
       ordered_listings = listing_ids.map do |id|
         all_listings.find { |l| l.id == id }
       end.compact
-      
       {
         listings: ordered_listings,
         explanation: explanation,

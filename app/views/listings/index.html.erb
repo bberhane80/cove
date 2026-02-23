@@ -2,11 +2,10 @@
 
 <div class="listings-container">
   <div class="page-header">
-    <h1>Available Listings</h1>
-    
+    <h1>Find Your Cove</h1>
+    <p class="text-muted">Search for your perfect home below</p>
     <!-- Filters (collapsible) -->
     <%= render 'filters' %>
-    
     <!-- Search Bar -->
     <div class="search-box">
       <%= form_with url: listings_path, method: :get, class: "search-form" do |f| %>
@@ -19,24 +18,22 @@
         <%= hidden_field_tag :bathrooms, params[:bathrooms] if params[:bathrooms].present? %>
         <%= hidden_field_tag :min_sqft, params[:min_sqft] if params[:min_sqft].present? %>
         <%= hidden_field_tag :max_sqft, params[:max_sqft] if params[:max_sqft].present? %>
-        
-        <div class="input-group">
-          <%= f.text_field :search, 
+        <div class="input-group input-group-lg">
+          <%= f.text_field :q, 
               class: "form-control search-input", 
-              placeholder: "Search by location, title, or description...",
-              value: params[:search] %>
-          <button class="btn btn-search" type="submit">
-            <i class="bi bi-search"></i> Search
+              placeholder: "What are you looking for? (e.g., 'affordable studio near transit')",
+              value: params[:q],
+              autocomplete: "off" %>
+          <button class="btn btn-primary search-btn" type="submit">
+            <i class="bi bi-search"></i> Smart Search
           </button>
         </div>
       <% end %>
     </div>
-    
     <!-- Active Filters Display -->
-   <% if params.slice(:city, :state, :min_price, :max_price, :bedrooms, :bathrooms, :min_sqft, :max_sqft, :search).values.any?(&:present?) %>
+    <% if params.slice(:city, :state, :min_price, :max_price, :bedrooms, :bathrooms, :min_sqft, :max_sqft, :search, :q).values.any?(&:present?) %>
       <div class="active-filters">
         <span class="active-filters-label">Active filters:</span>
-        
         <% if params[:city].present? %>
           <span class="filter-tag">
             City: <%= params[:city] %>
@@ -45,7 +42,6 @@
             <% end %>
           </span>
         <% end %>
-        
         <% if params[:state].present? %>
           <span class="filter-tag">
             State: <%= params[:state] %>
@@ -54,7 +50,6 @@
             <% end %>
           </span>
         <% end %>
-        
         <% if params[:min_price].present? %>
           <span class="filter-tag">
             Min: <%= number_to_currency(params[:min_price]) %>
@@ -63,7 +58,6 @@
             <% end %>
           </span>
         <% end %>
-        
         <% if params[:max_price].present? %>
           <span class="filter-tag">
             Max: <%= number_to_currency(params[:max_price]) %>
@@ -72,7 +66,6 @@
             <% end %>
           </span>
         <% end %>
-        
         <% if params[:bedrooms].present? %>
           <span class="filter-tag">
             <%= params[:bedrooms].to_i == 0 ? 'Studio' : "#{params[:bedrooms]}+ beds" %>
@@ -81,7 +74,6 @@
             <% end %>
           </span>
         <% end %>
-        
         <% if params[:bathrooms].present? %>
           <span class="filter-tag">
             <%= params[:bathrooms] %>+ baths
@@ -90,7 +82,6 @@
             <% end %>
           </span>
         <% end %>
-        
         <% if params[:search].present? %>
           <span class="filter-tag">
             Search: "<%= params[:search] %>"
@@ -99,11 +90,17 @@
             <% end %>
           </span>
         <% end %>
-        
+        <% if params[:q].present? %>
+          <span class="filter-tag">
+            AI Search: "<%= params[:q] %>"
+            <%= link_to listings_path(params.except(:q)), class: "remove-filter" do %>
+              <i class="bi bi-x"></i>
+            <% end %>
+          </span>
+        <% end %>
         <%= link_to "Clear all filters", listings_path, class: "clear-all-btn" %>
       </div>
     <% end %>
-    
     <!-- Results Count -->
     <div class="results-summary">
       <% listings_count = @listings.size %>
@@ -111,26 +108,175 @@
         <strong><%= listings_count %></strong> <%= 'listing'.pluralize(listings_count) %> found
       </p>
     </div>
+    <% if params[:q].present? %>
+      <div class="search-results-info">
+        <div class="alert alert-info d-flex align-items-center">
+          <i class="bi bi-lightbulb me-2"></i>
+          <div>
+            <strong>AI Search Results:</strong> <%= @search_explanation %>
+            <%= link_to "Clear search", listings_path, class: "ms-3 btn btn-sm btn-outline-secondary" %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- Listings Grid -->
+  <% if @listings.any? %>
+    <div class="listings-grid">
+      <% @listings.each do |listing| %>
+        <div class="listing-card">
+          <% if listing.image_url.present? %>
+            <%= image_tag listing.image_url, alt: listing.title, class: "listing-image" %>
+          <% else %>
+            <div class="listing-image-placeholder">No Image</div>
+          <% end %>
+          <div class="listing-details">
+            <h3><%= listing.title %></h3>
+            <p class="address">
+              <i class="bi bi-geo-alt"></i>
+              <%= listing.address %>, <%= listing.city %>, <%= listing.state %>
+            </p>
+            <div class="listing-info">
+              <span class="price"><%= number_to_currency(listing.price) %>/month</span>
+              <% if listing.bedrooms.present? %>
+                <span><%= listing.bedrooms %> bed</span>
+              <% end %>
+              <% if listing.bathrooms.present? %>
+                <span><%= listing.bathrooms %> bath</span>
+              <% end %>
+            </div>
+            <p class="description"><%= truncate(listing.description, length: 100) %></p>
+            <div class="listing-actions">
+              <%= link_to 'View Details', listing, class: 'btn btn-primary' %>
+              <% if @bookmarked_listing_ids.include?(listing.id) %>
+                <% bookmark = current_user.bookmarks.find_by(listing_id: listing.id) %>
+                <%= button_to '⭐ Bookmarked', bookmark_path(bookmark), method: :delete, class: 'btn btn-bookmarked' %>
+              <% else %>
+                <%= button_to '☆ Bookmark', bookmarks_path(listing_id: listing.id), method: :post, class: 'btn btn-bookmark' %>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="empty-state">
+      <i class="bi bi-search" style="font-size: 4rem; color: #ccc;"></i>
+      <p>No listings found matching your search.</p>
+      <p class="text-muted">Try adjusting your search terms or browse all listings.</p>
+      <%= link_to 'View All Listings', listings_path, class: 'btn btn-primary' %>
+    </div>
+  <% end %>
+</div>
   </div>
   
   <!-- Listings Grid -->
   <% if @listings.any? %>
     <div class="listings-grid">
       <% @listings.each do |listing| %>
+<<<<<<< HEAD
         <%= render 'shared/listing_card', listing: listing, bookmarked_ids: @bookmarked_listing_ids %>
+=======
+        <div class="listing-card">
+          <% if listing.image_url.present? %>
+            <%= image_tag listing.image_url, alt: listing.title, class: "listing-image" %>
+          <% else %>
+            <div class="listing-image-placeholder">No Image</div>
+          <% end %>
+          
+          <div class="listing-details">
+            <h3><%= listing.title %></h3>
+            <p class="address">
+              <i class="bi bi-geo-alt"></i>
+              <%= listing.address %>, <%= listing.city %>, <%= listing.state %>
+            </p>
+            
+            <div class="listing-info">
+              <span class="price"><%= number_to_currency(listing.price) %>/month</span>
+              <% if listing.bedrooms.present? %>
+                <span><%= listing.bedrooms %> bed</span>
+              <% end %>
+              <% if listing.bathrooms.present? %>
+                <span><%= listing.bathrooms %> bath</span>
+              <% end %>
+            </div>
+            
+            <p class="description"><%= truncate(listing.description, length: 100) %></p>
+            
+            <div class="listing-actions">
+              <%= link_to 'View Details', listing, class: 'btn btn-primary' %>
+              
+              <% if @bookmarked_listing_ids.include?(listing.id) %>
+                <% bookmark = current_user.bookmarks.find_by(listing_id: listing.id) %>
+                <%= button_to '⭐ Bookmarked', bookmark_path(bookmark), method: :delete, class: 'btn btn-bookmarked' %>
+              <% else %>
+                <%= button_to '☆ Bookmark', bookmarks_path(listing_id: listing.id), method: :post, class: 'btn btn-bookmark' %>
+              <% end %>
+            </div>
+          </div>
+        </div>
+>>>>>>> bb-ai-mailer
       <% end %>
     </div>
   <% else %>
     <div class="empty-state">
       <i class="bi bi-search" style="font-size: 4rem; color: #ccc;"></i>
+<<<<<<< HEAD
       <p>No listings found matching your criteria.</p>
       <p class="text-muted">Try adjusting your filters or search terms.</p>
+=======
+      <p>No listings found matching your search.</p>
+      <p class="text-muted">Try adjusting your search terms or browse all listings.</p>
+>>>>>>> bb-ai-mailer
       <%= link_to 'View All Listings', listings_path, class: 'btn btn-primary' %>
     </div>
   <% end %>
 </div>
 
 <style>
+  .search-header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  
+  .search-header h1 {
+    margin-bottom: 10px;
+  }
+  
+  .search-form {
+    max-width: 800px;
+    margin: 30px auto;
+  }
+  
+  .search-input {
+    border-radius: 50px 0 0 50px;
+    padding: 15px 25px;
+    border: 2px solid #2d5016;
+  }
+  
+  .search-input:focus {
+    border-color: #2d5016;
+    box-shadow: 0 0 0 0.2rem rgba(45, 80, 22, 0.25);
+  }
+  
+  .search-btn {
+    border-radius: 0 50px 50px 0;
+    padding: 15px 30px;
+    background: linear-gradient(135deg, #6b8e23 0%, #556b2f 100%);
+    border: none;
+    font-weight: 600;
+  }
+  
+  .search-btn:hover {
+    background: linear-gradient(135deg, #7aa82c 0%, #6b8e23 100%);
+  }
+  
+  .search-results-info {
+    max-width: 800px;
+    margin: 20px auto;
+  }
+  
   .listings-container {
     max-width: 1200px;
     margin: 0 auto;
@@ -258,6 +404,16 @@
   .results-summary p {
     margin: 0;
     color: #6b7280;
+  }
+  
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+  }
+  
+  .empty-state p {
+    font-size: 1.1em;
+    margin: 10px 0;
   }
   
   .empty-state {

@@ -1,5 +1,7 @@
-<div class="profile-container">
-  <h1>Edit Profile</h1>
+<%= render 'shared/profile_info_compact_styles' %>
+
+<div class="edit-profile-container">
+  <h1>Settings</h1>
   
   <%= form_with(model: @user, local: true) do |f| %>
     <% if @user.errors.any? %>
@@ -12,6 +14,8 @@
         </ul>
       </div>
     <% end %>
+
+    <h3>Account Information</h3>
 
     <div class="form-group">
       <%= f.label :username %>
@@ -37,15 +41,38 @@
 
     <hr>
 
-    <h3>Email Preferences</h3>
+    <h3>
+      <i class="bi bi-envelope-heart"></i> Email Preferences
+    </h3>
     
     <div class="form-group">
-      <div class="form-check">
-        <%= f.check_box :receive_recommendations, class: 'form-check-input' %>
+      <div class="form-check form-switch">
+        <%= f.check_box :receive_recommendations, class: 'form-check-input', id: 'receive_recommendations_toggle' %>
         <%= f.label :receive_recommendations, "Send me personalized listing recommendations", class: 'form-check-label' %>
-        <small class="form-text text-muted">
-          We'll use AI to analyze your bookmarks and send you weekly recommendations for similar properties you might like.
-        </small>
+      </div>
+      <small class="form-text text-muted">
+        We'll use AI to analyze your bookmarks and send you recommendations for similar properties you might like.
+      </small>
+    </div>
+
+    <div class="form-group" id="email-frequency-group" style="<%= @user.receive_recommendations? ? '' : 'display: none;' %>">
+      <%= f.label :email_frequency, "How often would you like to receive recommendations?" %>
+      
+      <div class="frequency-options">
+        <% User::EMAIL_FREQUENCIES.each do |value, label| %>
+          <div class="frequency-option">
+            <%= f.radio_button :email_frequency, value, class: 'form-check-input', id: "email_frequency_#{value}" %>
+            <%= f.label :email_frequency, label, value: value, class: 'form-check-label', for: "email_frequency_#{value}" do %>
+              <div class="frequency-card">
+                <i class="bi bi-<%= frequency_icon(value) %>"></i>
+                <div>
+                  <strong><%= label %></strong>
+                  <small><%= frequency_description(value) %></small>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        <% end %>
       </div>
     </div>
 
@@ -55,3 +82,239 @@
     </div>
   <% end %>
 </div>
+
+<script>
+  // Toggle email frequency options based on receive_recommendations checkbox
+  document.addEventListener('DOMContentLoaded', () => {
+    const toggle = document.getElementById('receive_recommendations_toggle');
+    const frequencyGroup = document.getElementById('email-frequency-group');
+    
+    if (toggle) {
+      toggle.addEventListener('change', (e) => {
+        if (e.target.checked) {
+          frequencyGroup.style.display = 'block';
+        } else {
+          frequencyGroup.style.display = 'none';
+        }
+      });
+    }
+  });
+</script>
+
+<style>
+  .edit-profile-container {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  .edit-profile-container h1 {
+    margin-bottom: 25px;
+    color: #1f2937;
+  }
+
+  .edit-profile-container h3 {
+    font-size: 1.2rem;
+    color: #1f2937;
+    margin: 25px 0 15px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .edit-profile-container h3 i {
+    color: #2d5016;
+  }
+
+  .error-messages {
+    background-color: #fee;
+    border: 1px solid #fcc;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 20px;
+  }
+
+  .error-messages h2 {
+    color: #c00;
+    font-size: 1.1rem;
+    margin: 0 0 10px 0;
+  }
+
+  .error-messages ul {
+    margin: 0;
+    padding-left: 20px;
+  }
+
+  .error-messages li {
+    color: #c00;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  .form-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #374151;
+  }
+
+  .form-control {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+  }
+
+  .form-control:focus {
+    outline: none;
+    border-color: #2d5016;
+    box-shadow: 0 0 0 3px rgba(45, 80, 22, 0.1);
+  }
+
+  .form-text {
+    display: block;
+    margin-top: 6px;
+    font-size: 0.875rem;
+    color: #6b7280;
+  }
+
+  .form-check {
+    margin-bottom: 10px;
+  }
+
+  .form-check-input {
+    margin-right: 8px;
+    cursor: pointer;
+  }
+
+  .form-check-label {
+    font-weight: 500;
+    color: #374151;
+    cursor: pointer;
+  }
+
+  .form-switch .form-check-input {
+    width: 3em;
+    height: 1.5em;
+  }
+
+  .frequency-options {
+    display: grid;
+    gap: 12px;
+    margin-top: 15px;
+  }
+
+  .frequency-option {
+    position: relative;
+  }
+
+  .frequency-option input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+  }
+
+  .frequency-card {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px;
+    background: white;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .frequency-option input[type="radio"]:checked + label .frequency-card {
+    border-color: #2d5016;
+    background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%);
+    box-shadow: 0 2px 8px rgba(45, 80, 22, 0.15);
+  }
+
+  .frequency-card:hover {
+    border-color: #6b8e23;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(45, 80, 22, 0.1);
+  }
+
+  .frequency-card i {
+    font-size: 1.8rem;
+    color: #2d5016;
+    flex-shrink: 0;
+  }
+
+  .frequency-card div {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .frequency-card strong {
+    color: #1f2937;
+    font-size: 1rem;
+  }
+
+  .frequency-card small {
+    color: #6b7280;
+    font-size: 0.85rem;
+  }
+
+  .form-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #e5e7eb;
+  }
+
+  .btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, #6b8e23 0%, #556b2f 100%);
+    color: white;
+  }
+
+  .btn-primary:hover {
+    background: linear-gradient(135deg, #7aa82c 0%, #6b8e23 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(107, 142, 35, 0.3);
+  }
+
+  .btn-secondary {
+    background: #e5e7eb;
+    color: #374151;
+  }
+
+  .btn-secondary:hover {
+    background: #d1d5db;
+  }
+
+  hr {
+    border: none;
+    border-top: 1px solid #e5e7eb;
+    margin: 30px 0;
+  }
+
+  #email-frequency-group {
+    background: #f9fafb;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+    margin-top: 15px;
+  }
+</style>

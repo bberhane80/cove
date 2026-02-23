@@ -1,14 +1,46 @@
-<%= render 'shared/profile_info_styles' %>
+<%= render 'shared/profile_stats_styles' %>
 
 <div class="profile-container">
   <h1>@<%= @user.username %></h1>
-  
-  <%= render 'shared/profile_info_display', user: @user %>
-  
+  <%= render 'shared/profile_stats_display', user: @user %>
   <% if @user == current_user %>
     <%= link_to 'Edit Profile', edit_user_path(@user), class: 'btn btn-primary' %>
   <% end %>
+  <hr>
+  <h2>Bookmarked Listings (<%= @bookmarks.count %>)</h2>
+  <% if @bookmarks.any? %>
+    <div class="listings-grid">
+      <% @bookmarks.each do |bookmark| %>
+        <% listing = bookmark.listing %>
+        <div class="listing-card">
+          <% if listing.image_url.present? %>
+            <%= image_tag listing.image_url, alt: listing.title, class: "listing-image" %>
+          <% else %>
+            <div class="listing-image-placeholder">No Image</div>
+          <% end %>
+          <div class="listing-details">
+            <h3><%= listing.title %></h3>
+            <p class="address"><%= listing.address %></p>
+            <div class="listing-info">
+              <span class="price"><%= number_to_currency(listing.price) %>/month</span>
+              <% if listing.bedrooms.present? %>
+                <span><%= listing.bedrooms %> bed</span>
+              <% end %>
+              <% if listing.bathrooms.present? %>
+                <span><%= listing.bathrooms %> bath</span>
+              <% end %>
+            </div>
+            <%= link_to 'View Details', listing, class: 'btn btn-primary' %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <p>No bookmarked listings yet. <%= link_to 'Browse listings', listings_path %> to get started!</p>
+  <% end %>
+</div>
   
+  <%= render 'shared/profile_stats_display', user: @user %>
   <hr>
   
   <h2>Bookmarked Listings (<%= @bookmarks.count %>)</h2>
