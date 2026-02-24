@@ -311,9 +311,7 @@
     
     <!-- Results Count and AI Explanation -->
     <div class="results-summary">
-      <p>
-        <strong><%= @listings.count %></strong> <%= 'listing'.pluralize(@listings.count) %> found
-      </p>
+      
       <% if @ai_explanation.present? %>
         <div class="ai-explanation alert alert-info mt-2">
           <%= @ai_explanation %>

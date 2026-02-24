@@ -22,16 +22,31 @@
 require 'rails_helper'
 
 describe Listing, type: :model do
-  it 'is valid with valid attributes' do
+  it 'is valid with all required attributes' do
     listing = Listing.new(
-      title: 'Test',
-      description: 'Test desc',
-      city: 'Boston',
-      state: 'MA',
+      title: 'Test Listing',
+      address: '123 Main St',
+      city: 'Testville',
+      state: 'TS',
       price: 1000,
+      description: 'A great place',
       bedrooms: 2,
-      bathrooms: 1.0
+      bathrooms: 1.5
     )
     expect(listing).to be_valid
   end
+
+  it 'is invalid without a title' do
+    listing = Listing.new(
+      address: '123 Main St',
+      city: 'Testville',
+      state: 'TS',
+      price: 1000,
+      description: 'A great place',
+      bedrooms: 2,
+      bathrooms: 1.5
+    )
+    expect(listing).not_to be_valid
+  end
 end
+        state: 'TS',
