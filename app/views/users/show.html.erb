@@ -1,7 +1,7 @@
 <%= render 'shared/profile_stats_styles' %>
 
 <div class="profile-container">
-  <h1>@<%= @user.username %></h1>
+  <h1>MyProfile</h1>
   <%= render 'shared/profile_stats_display', user: @user %>
   <% if @user == current_user %>
     <%= link_to 'Edit Profile', edit_user_path(@user), class: 'btn btn-primary' %>
