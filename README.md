@@ -148,10 +148,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 👤 Author
 
 **Berhane Mussie Berhane**
-- GitHub: [@yourusername](https://github.com/yourusername)
-- LinkedIn: [linkedin.com/in/yourprofile](https://linkedin.com/in/yourprofile)
+- GitHub: https://github.com/bberhane80
+- LinkedIn: https://www.linkedin.com/in/berhaneberhane/
 - Email: berhane896@gmail.com
-- Portfolio: [yourportfolio.com](https://yourportfolio.com)
 
 ## 🙏 Acknowledgments
 
@@ -246,13 +245,6 @@ SMTP_USERNAME=your-email@gmail.com
 SMTP_PASSWORD=your-app-password
 ```
 
----
-
-**Built with ❤️ during Discovery Partners Institute Software Developer Apprenticeship**
-
-*Making home hunting smarter, one AI recommendation at a time.* 🏡✨
-
----
 
 ## 📊 Project Stats
 
@@ -264,24 +256,6 @@ SMTP_PASSWORD=your-app-password
 - **Development Time:** 4 weeks
 - **Contributors:** 1
 
----
-
-### Quick Links
-
-- [Live Demo](#) (Add when deployed)
-- [API Documentation](#)
-- [Changelog](CHANGELOG.md)
-- [Contributing Guidelines](CONTRIBUTING.md)
-
----
-
-**Last Updated:** February 2026
-- bio (text, optional)
-- receive_recommendations (boolean, default: true)
-- email_frequency (string, default: 'weekly')
-- created_at (datetime)
-- updated_at (datetime)
-```
 
 ### Listings Table
 ```ruby
