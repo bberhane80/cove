@@ -13,7 +13,6 @@ class ListingsController < ApplicationController
     @listings = @listings.where(state: params[:state]) if params[:state].present?
     @listings = @listings.where("price <= ?", params[:max_price]) if params[:max_price].present?
     @listings = @listings.where("price >= ?", params[:min_price]) if params[:min_price].present?
-<<<<<<< HEAD
     if params[:bedrooms].present?
       if params[:bedrooms].to_s.downcase == "studio"
         # Treat Studio as 0 bedrooms
@@ -23,22 +22,10 @@ class ListingsController < ApplicationController
         @listings = @listings.where("bedrooms >= ?", min_bedrooms)
       end
     end
-=======
-    if params[:bedrooms].present?
-      if params[:bedrooms].to_s.downcase == "studio"
-        # Treat Studio as 0 bedrooms
-        @listings = @listings.where(bedrooms: 0)
-      else
-        min_bedrooms = params[:bedrooms].to_i
-        @listings = @listings.where("bedrooms >= ?", min_bedrooms)
-      end
-    end
->>>>>>> bb-ai-search
     @listings = @listings.where("bathrooms >= ?", params[:bathrooms]) if params[:bathrooms].present?
     @listings = @listings.where("square_feet >= ?", params[:min_sqft]) if params[:min_sqft].present?
     @listings = @listings.where("square_feet <= ?", params[:max_sqft]) if params[:max_sqft].present?
     
-<<<<<<< HEAD
     # Apply search
     if params[:search].present?
       search_term = "%#{params[:search]}%"
@@ -59,26 +46,15 @@ class ListingsController < ApplicationController
       end
     end
     # Order results
-    if @listings.is_a?(ActiveRecord::Relation)
-      @listings = @listings.order(created_at: :desc)
-    end
-=======
-    # Apply search
-    if params[:search].present?
-      search_term = "%#{params[:search]}%"
-      @listings = @listings.where(
-        "title ILIKE ? OR description ILIKE ? OR address ILIKE ? OR city ILIKE ?", 
-        search_term, search_term, search_term, search_term
-      )
-    end
-    
+    @listings = @listings.is_a?(ActiveRecord::Relation) ? @listings.order(created_at: :desc) : @listings
     # Order results
-    @listings = @listings.order(created_at: :desc)
->>>>>>> bb-ai-search
-    
+    # Already handled above with type check
+
     # Get unique values for filter dropdowns
     @cities = Listing.distinct.pluck(:city).compact.sort
+    @cities ||= []
     @states = Listing.distinct.pluck(:state).compact.sort
+    @states ||= []
   end
 
   def show
@@ -91,4 +67,5 @@ class ListingsController < ApplicationController
   def set_listing
     @listing = Listing.find(params[:id])
   end
+
 end

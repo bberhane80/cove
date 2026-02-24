@@ -20,7 +20,7 @@
             <i class="bi bi-geo-alt"></i> City
           </label>
           <%= f.select :city, 
-              options_for_select([['Any City', '']] + @cities.map { |c| [c, c] }, params[:city]),
+              options_for_select([['Any City', '']] + (@cities || []).map { |c| [c, c] }, params[:city]),
               {},
               class: 'filter-select' %>
         </div>
@@ -30,7 +30,7 @@
             <i class="bi bi-map"></i> State
           </label>
           <%= f.select :state,
-              options_for_select([['Any State', '']] + @states.map { |s| [s, s] }, params[:state]),
+              options_for_select([['Any State', '']] + (@states || []).map { |s| [s, s] }, params[:state]),
               {},
               class: 'filter-select' %>
         </div>
