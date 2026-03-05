@@ -1,0 +1,66 @@
+<div class="profile-stats-container">
+
+  
+  <div class="stats-grid">
+    <!-- Username Card -->
+    <div class="stat-card username-card">
+      <div class="stat-icon">
+        <i class="bi bi-person-circle"></i>
+      </div>
+      <div class="stat-content">
+        <span class="stat-label">Username</span>
+        <span class="stat-value">@<%= user.username %></span>
+      </div>
+    </div>
+    
+    <!-- Email Card -->
+    <div class="stat-card email-card">
+      <div class="stat-icon">
+        <i class="bi bi-envelope-at"></i>
+      </div>
+      <div class="stat-content">
+        <span class="stat-label">Email</span>
+        <span class="stat-value"><%= truncate(user.email, length: 25) %></span>
+      </div>
+    </div>
+    
+    <!-- Name Card -->
+    <div class="stat-card name-card">
+      <div class="stat-icon">
+        <i class="bi bi-person"></i>
+      </div>
+      <div class="stat-content">
+        <span class="stat-label">Full Name</span>
+        <span class="stat-value">
+          <%= user.name.present? ? user.name : "Not set" %>
+        </span>
+      </div>
+    </div>
+    
+    <!-- Member Since Card -->
+    <div class="stat-card date-card">
+      <div class="stat-icon">
+        <i class="bi bi-calendar-check"></i>
+      </div>
+      <div class="stat-content">
+        <span class="stat-label">Member Since</span>
+        <span class="stat-value"><%= user.created_at.strftime("%b %Y") %></span>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Bio Section -->
+  <div class="bio-card">
+    <div class="bio-header">
+      <i class="bi bi-chat-left-quote"></i>
+      <span>About Me</span>
+    </div>
+    <div class="bio-content">
+      <% if user.bio.present? %>
+        <p><%= user.bio %></p>
+      <% else %>
+        <p class="text-muted"><em>No bio added yet. Tell others about yourself!</em></p>
+      <% end %>
+    </div>
+  </div>
+</div>

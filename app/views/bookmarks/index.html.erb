@@ -1,0 +1,32 @@
+<%= render 'shared/listing_card_styles' %>
+
+<div class="bookmarks-container">
+  <h1>My Bookmarks</h1>
+  
+  <% if @bookmarks.any? %>
+    <div class="listings-grid">
+      <% @bookmarks.each do |bookmark| %>
+        <%= render 'shared/listing_card', listing: bookmark.listing, bookmark: bookmark, show_bookmark_date: true %>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="empty-state">
+      <i class="bi bi-bookmark-x" style="font-size: 4rem; color: #ccc;"></i>
+      <p>No bookmarks yet.</p>
+      <%= link_to 'Browse Listings', listings_path, class: 'btn btn-primary' %>
+    </div>
+  <% end %>
+</div>
+
+<style>
+  .bookmarks-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  .bookmarks-container h1 {
+    margin-bottom: 30px;
+    color: #1f2937;
+  }
+</style>

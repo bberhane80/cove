@@ -1,0 +1,30 @@
+Hi <%= @user.username %>,
+
+Based on your bookmarked listings, we've found <%= @recommendations.count %> properties that we think you'll love!
+
+YOUR PROFILE:
+<%= @summary %>
+
+<% @recommendations.each_with_index do |rec, index| %>
+<% listing = rec[:listing] %>
+
+=== RECOMMENDATION #<%= index + 1 %> (<%= rec[:match_score] %>% Match) ===
+
+<%= listing.title %>
+<%= listing.address %>, <%= listing.city %>, <%= listing.state %>
+
+$<%= number_with_delimiter(listing.price) %>/month
+<%= listing.bedrooms %> bed | <%= listing.bathrooms %> bath | <%= number_with_delimiter(listing.square_feet) %> sq ft
+
+Why we picked this:
+<%= rec[:reason] %>
+
+View details: <%= listing_url(listing) %>
+
+<% end %>
+
+---
+Browse all listings: <%= listings_url %>
+
+You're receiving this because you have recommendation emails enabled.
+Update your preferences: <%= edit_user_url(@user) %>

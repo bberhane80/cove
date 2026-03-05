@@ -141,6 +141,10 @@ RecommendationMailer.weekly_recommendations(user).deliver_now
 
 **Manually Trigger Recommendation Task**
 
+## 📝 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
 ## 👤 Author
 
 **Berhane Mussie Berhane**
@@ -241,6 +245,16 @@ SMTP_USERNAME=your-email@gmail.com
 SMTP_PASSWORD=your-app-password
 ```
 
+<<<<<<< HEAD
+=======
+---
+
+**Built with ❤️ during Discovery Partners Institute Software Developer Apprenticeship**
+
+*Making home hunting smarter, one AI recommendation at a time.* 🏡✨
+
+---
+>>>>>>> bb-ajax
 
 ## 📊 Project Stats
 
@@ -252,6 +266,27 @@ SMTP_PASSWORD=your-app-password
 - **Development Time:** 4 weeks
 - **Contributors:** 1
 
+<<<<<<< HEAD
+=======
+---
+
+### Quick Links
+
+- [Live Demo](#) (Add when deployed)
+- [API Documentation](#)
+- [Changelog](CHANGELOG.md)
+- [Contributing Guidelines](CONTRIBUTING.md)
+
+---
+
+**Last Updated:** February 2026
+- bio (text, optional)
+- receive_recommendations (boolean, default: true)
+- email_frequency (string, default: 'weekly')
+- created_at (datetime)
+- updated_at (datetime)
+```
+>>>>>>> bb-ajax
 
 ### Listings Table
 ```ruby

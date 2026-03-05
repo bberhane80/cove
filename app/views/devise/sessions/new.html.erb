@@ -1,0 +1,117 @@
+<div class="auth-container">
+  <div class="auth-card">
+    <h2>Log in</h2>
+
+    <%= simple_form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+      <div class="form-inputs">
+        <%= f.input :email,
+                    required: false,
+                    autofocus: true,
+                    input_html: { autocomplete: "email", class: "form-control" },
+                    label_html: { class: "form-label" },
+                    wrapper_html: { class: "form-group" } %>
+        
+        <%= f.input :password,
+                    required: false,
+                    input_html: { autocomplete: "current-password", class: "form-control" },
+                    label_html: { class: "form-label" },
+                    wrapper_html: { class: "form-group" } %>
+        
+        <% if devise_mapping.rememberable? %>
+          <%= f.input :remember_me, 
+                      as: :boolean,
+                      wrapper_html: { class: "form-group" },
+                      label_html: { class: "custom-control-label" } %>
+        <% end %>
+      </div>
+
+      <div class="form-actions">
+        <%= f.button :submit, "Log in", class: "btn btn-primary btn-block" %>
+      </div>
+    <% end %>
+
+    <div class="auth-links">
+      <%= render "devise/shared/links" %>
+    </div>
+  </div>
+</div>
+
+<style>
+  .auth-container {
+    min-height: calc(100vh - 76px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%);
+    padding: 20px;
+  }
+  
+  .auth-card {
+    background: white;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(45, 80, 22, 0.1);
+    width: 100%;
+    max-width: 450px;
+  }
+  
+  .auth-card h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #2d5016;
+    font-weight: 700;
+  }
+  
+  .form-inputs {
+    margin-bottom: 20px;
+  }
+  
+  .form-group {
+    margin-bottom: 20px;
+  }
+  
+  .form-label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #374151;
+  }
+  
+  .form-control {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+  }
+  
+  .form-control:focus {
+    outline: none;
+    border-color: #2d5016;
+    box-shadow: 0 0 0 3px rgba(45, 80, 22, 0.1);
+  }
+  
+  .form-text {
+    display: block;
+    margin-top: 5px;
+    font-size: 0.875rem;
+  }
+  
+  .boolean label {
+    font-weight: 500;
+    color: #4b5563;
+  }
+  
+  .boolean input[type="checkbox"] {
+    margin-right: 8px;
+  }
+  
+  .form-actions {
+    margin-top: 30px;
+  }
+  
+  .btn-block {
+    width: 100%;
+    padding: 12px;
+    font-size: 1rem

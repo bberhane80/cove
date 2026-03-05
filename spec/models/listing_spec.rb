@@ -1,0 +1,52 @@
+# == Schema Information
+#
+# Table name: listings
+#
+#  id           :bigint           not null, primary key
+#  address      :string
+#  bathrooms    :decimal(3, 1)
+#  bedrooms     :integer
+#  city         :string
+#  description  :text
+#  details      :text
+#  image_url    :string
+#  neighborhood :text
+#  price        :decimal(10, 2)
+#  square_feet  :integer
+#  state        :string
+#  title        :string
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
+#  user_id      :integer
+#
+require 'rails_helper'
+
+describe Listing, type: :model do
+  it 'is valid with all required attributes' do
+    listing = Listing.new(
+      title: 'Test Listing',
+      address: '123 Main St',
+      city: 'Testville',
+      state: 'TS',
+      price: 1000,
+      description: 'A great place',
+      bedrooms: 2,
+      bathrooms: 1.5
+    )
+    expect(listing).to be_valid
+  end
+
+  it 'is invalid without a title' do
+    listing = Listing.new(
+      address: '123 Main St',
+      city: 'Testville',
+      state: 'TS',
+      price: 1000,
+      description: 'A great place',
+      bedrooms: 2,
+      bathrooms: 1.5
+    )
+    expect(listing).not_to be_valid
+  end
+end
+        state: 'TS',
