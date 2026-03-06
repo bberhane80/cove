@@ -4,8 +4,8 @@
 - Trainee Name: Berhane Mussie Berhane
 - Project Name: Cove
 - Reviewer Name: Claude, Ian Heraty, Adolfo Nava
-- Repository URL: https://github.com/bberhane80/cove
-- Feedback Pull Request URL: TODO
+- Repository URL: <https://github.com/bberhane80/cove>
+- Feedback Pull Request URL: <https://github.com/bberhane80/cove/pull/10>
 
 ---
 
