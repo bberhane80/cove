@@ -1,10 +1,5 @@
 # Cove — Prioritized Improvement Plan
 
-Generated: 2026-03-06
-Reviewer: Claude Code (DPI Tech Apprenticeship Staff Review)
-
----
-
 ## P0 — Critical (Security / Architecture / Broken Patterns)
 
 These issues must be resolved before the project can be considered production-ready or submitted for final evaluation.
