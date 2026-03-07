@@ -23,9 +23,12 @@ class Listing < ApplicationRecord
   has_many :bookmarks, dependent: :destroy
   has_many :bookmarked_by_users, through: :bookmarks, source: :user
 
-  validates :title, :price, :bedrooms, :bathrooms, :address, :city, :state, presence: true
-  validates :price, numericality: { greater_than: 0 }
-  validates :bedrooms, :bathrooms, numericality: { greater_than_or_equal_to: 0 }
+  validates :title, presence: true, length: { maximum: 100 }
+  validates :description, presence: true, length: { maximum: 2000 }
+  validates :price, presence: true, numericality: { greater_than: 0 }
+  validates :bedrooms, numericality: { greater_than_or_equal_to: 0, only_integer: true }
+  validates :bathrooms, numericality: { greater_than: 0 }
+  validates :city, :state, presence: true
 
   PROPERTY_TYPES = [ "House", "Apartment", "Condo", "Townhouse", "Land" ]
 
