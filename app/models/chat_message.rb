@@ -19,10 +19,10 @@
 #
 class ChatMessage < ApplicationRecord
   belongs_to :chat_session
-  
+
   validates :role, presence: true, inclusion: { in: %w[user assistant system] }
   validates :content, presence: true
-  
-  scope :by_user, -> { where(role: 'user') }
-  scope :by_assistant, -> { where(role: 'assistant') }
+
+  scope :by_user, -> { where(role: "user") }
+  scope :by_assistant, -> { where(role: "assistant") }
 end

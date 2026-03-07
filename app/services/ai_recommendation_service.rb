@@ -2,9 +2,9 @@ class AiRecommendationService
   def initialize(user)
     @user = user
     # Load .env if not already loaded
-    require 'dotenv/load' unless ENV['ANTHROPIC_API_KEY'].present?
+    require "dotenv/load" unless ENV["ANTHROPIC_API_KEY"].present?
     # Get API key from environment
-    api_key = ENV['ANTHROPIC_API_KEY']
+    api_key = ENV["ANTHROPIC_API_KEY"]
     if api_key.blank?
       Rails.logger.error("ANTHROPIC_API_KEY not found in environment variables")
       raise "Anthropic API key not configured"
@@ -97,20 +97,20 @@ class AiRecommendationService
   def parse_recommendations(response, all_listings)
     begin
       content = response.dig("content", 0, "text")
-      
+
       # Remove markdown code blocks if present
-      content = content.gsub(/```json\n?/, '').gsub(/```\n?/, '').strip
-      
+      content = content.gsub(/```json\n?/, "").gsub(/```\n?/, "").strip
+
       # Parse the JSON
       result = JSON.parse(content)
-      
+
       # Get the listing IDs (removed unused variable)
-      
+
       # Fetch the actual listings and build recommendations
       recommendations = result["recommendations"].map do |rec|
         listing = all_listings.find { |l| l.id == rec["listing_id"] }
         next unless listing
-        
+
         {
           listing: listing,
           reason: rec["reason"],
