@@ -2,12 +2,12 @@ class ChatsController < ApplicationController
   before_action :authenticate_user!
   
   def show
-    @session = current_user.current_chat_session
+    @session = current_user.active_chat_session
     @messages = @session.chat_messages.order(:created_at)
   end
   
   def create
-    @session = current_user.current_chat_session
+    @session = current_user.active_chat_session
     chatbot = ChatbotService.new(current_user)
     
     result = chatbot.send_message(params[:message], @session)
