@@ -19,4 +19,26 @@
 #
 class ChatSession < ApplicationRecord
   belongs_to :user
+  has_many :chat_messages, dependent: :destroy
+  
+  validates :user, presence: true
+  
+  scope :active, -> { where(ended_at: nil) }
+  scope :recent, -> { order(created_at: :desc) }
+  
+  def active?
+    ended_at.nil?
+  end
+  
+  def end_session!
+    update(ended_at: Time.current)
+  end
+  
+  def add_message(role, content)
+    chat_messages.create!(role: role, content: content)
+  end
+  
+  def conversation_history
+    chat_messages.order(:created_at).pluck(:role, :content)
+  end
 end

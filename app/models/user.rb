@@ -78,4 +78,11 @@ class User < ApplicationRecord
       "monthly" => "Monthly"
     }.freeze
     validates :email_frequency, inclusion: { in: EMAIL_FREQUENCIES.keys }, allow_nil: true
+
+    has_many :chat_sessions, dependent: :destroy
+    has_many :chat_messages, through: :chat_sessions
+
+    def active_chat_session
+      chat_sessions.active.last || chat_sessions.create!(started_at: Time.current)
+    end
 end
