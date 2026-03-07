@@ -6,7 +6,22 @@ class ChatbotService
 
   def send_message(user_message, session)
     # Add user message to session
-    session.add_message("user", user_message)
+    session.add_message('user', user_message)
+
+    # Analyze if user is asking for recommendations
+    if should_recommend_listings?(user_message, session)
+      # Extract criteria from conversation
+      criteria = extract_search_criteria(session)
+
+      # Find matching listings
+      listings = find_matching_listings(criteria)
+
+      # Include listings in context
+      system_context = system_prompt_with_listings(listings)
+    else
+      system_context = system_prompt
+      listings = nil
+    end
 
     # Build conversation history
     conversation = build_conversation_history(session)
@@ -15,22 +30,23 @@ class ChatbotService
     response = @client.messages(
       parameters: {
         model: "claude-sonnet-4-20250514",
-        max_tokens: 1000,
-        system: system_prompt,
+        max_tokens: 1500,
+        system: system_context,
         messages: conversation
       }
     )
-    
+
     # Extract assistant response
-    assistant_message = response.dig("content", 0, "text")
-    
+    assistant_message = response.dig('content', 0, 'text')
+
     # Add assistant message to session
     session.add_message('assistant', assistant_message)
-    
+
     {
       success: true,
       message: assistant_message,
-      session_id: session.id
+      session_id: session.id,
+      listings: listings
     }
   rescue => e
     Rails.logger.error("Chatbot error: #{e.message}")
@@ -40,50 +56,76 @@ class ChatbotService
       error: e.message
     }
   end
-  
+
   private
+
+def should_recommend_listings?(message, session)
+  # Check if conversation has enough context for recommendations
+  message_count = session.chat_messages.by_user.count
   
-  def system_prompt
-    <<~PROMPT
-      You are Cove's AI assistant, helping users find their perfect rental apartment.
-      
-      Your role:
-      - Ask clarifying questions about budget, location preferences, lifestyle, and must-haves
-      - Be conversational, friendly, and helpful
-      - Keep responses concise (2-3 sentences max)
-      - After gathering info, provide specific recommendations
-      - Use the user's name (#{@user.username}) when appropriate
-      
-      User context:
-      - Username: #{@user.username}
-      - Email: #{@user.email}
-      - Bio: #{@user.bio.presence || 'Not provided'}
-      - Bookmarked listings: #{@user.bookmarks.count}
-      
-      Guidelines:
-      - Start by asking about their budget if not mentioned
-      - Ask about preferred neighborhoods/cities
-      - Inquire about must-have amenities (parking, pets, etc.)
-      - Ask about lifestyle (commute, nightlife, quiet, family-friendly)
-      - Suggest listings based on their responses
-      - Keep a warm, helpful tone
-      
-      Example flow:
-      1. "Hi #{@user.username}! I'm here to help you find your perfect apartment. What's your budget range?"
-      2. "Great! Where are you looking to live? Any specific neighborhoods or cities?"
-      3. "What's most important to you in an apartment? (e.g., natural light, modern kitchen, outdoor space)"
-      4. Based on answers, recommend specific listings from our database
-    PROMPT
+  keywords = ['show me', 'recommend', 'find', 'looking for', 'need', 'want', 'search']
+  
+  message_count >= 2 && keywords.any? { |kw| message.downcase.include?(kw) }
+end
+
+def extract_search_criteria(session)
+  # Simple keyword extraction (could be enhanced with NLP)
+  conversation_text = session.chat_messages.pluck(:content).join(' ').downcase
+  
+  criteria = {}
+  
+  # Extract budget
+  if conversation_text.match(/\$?(\d{3,4})/)
+    criteria[:max_price] = $1.to_i
   end
   
-  def build_conversation_history(session)
-    messages = []
-    
-    session.chat_messages.order(:created_at).each do |msg|
-      next if msg.role == 'system'
-      messages << { role: msg.role, content: msg.content }
+  # Extract bedrooms
+  if conversation_text.match(/(\d)\s*(bed|br|bedroom)/)
+    criteria[:bedrooms] = $1.to_i
+  end
+  
+  # Extract city
+  cities = ['chicago', 'evanston', 'oak park', 'naperville']
+  cities.each do |city|
+    criteria[:city] = city.titleize if conversation_text.include?(city)
+  end
+  
+  criteria
+end
+
+def find_matching_listings(criteria)
+  listings = Listing.active
+  
+  listings = listings.where('price <= ?', criteria[:max_price]) if criteria[:max_price]
+  listings = listings.where(bedrooms: criteria[:bedrooms]) if criteria[:bedrooms]
+  listings = listings.where(city: criteria[:city]) if criteria[:city]
+  
+  listings.limit(3)
+end
+
+  def system_prompt_with_listings(listings)
+    listings_text = if listings.any?
+      listings.map do |l|
+        "- #{l.title} in #{l.city}: $#{l.price}/mo, #{l.bedrooms}br/#{l.bathrooms}ba, #{l.square_feet} sqft\n  Link: #{Rails.application.routes.url_helpers.listing_url(l, host: 'localhost:3000')}"
+      end.join("\n")
+    else
+      "No exact matches found in our current inventory."
     end
-    
-    messages
+    system_prompt + "\n\nCURRENT MATCHING LISTINGS:\n#{listings_text}"
   end
+
+  # Stub for system_prompt if not defined elsewhere
+  def system_prompt
+    "You are Cove, a helpful real estate assistant."
+  end
+
+  # Stub for build_conversation_history if not defined elsewhere
+  def build_conversation_history(session)
+    # This should return the conversation in the format expected by the AI client
+    # For now, return a simple array of messages
+    session.chat_messages.map do |msg|
+      { role: msg.role, content: msg.content }
+    end
+  end
+
 end
