@@ -245,7 +245,6 @@ SMTP_USERNAME=your-email@gmail.com
 SMTP_PASSWORD=your-app-password
 ```
 
-<<<<<<< HEAD
 =======
 ---
 
