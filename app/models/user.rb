@@ -63,6 +63,7 @@ class User < ApplicationRecord
   validates :name, length: { maximum: 100 }, allow_blank: true
   validates :bio, length: { maximum: 500 }, allow_blank: true
 
+
   EMAIL_FREQUENCIES = {
     "daily" => "Daily",
     "weekly" => "Weekly",
@@ -70,14 +71,6 @@ class User < ApplicationRecord
     "monthly" => "Monthly"
   }.freeze
   validates :email_frequency, inclusion: { in: EMAIL_FREQUENCIES.keys }, allow_nil: true
-
-    EMAIL_FREQUENCIES = {
-      "daily" => "Daily",
-      "weekly" => "Weekly",
-      "biweekly" => "Every 2 weeks",
-      "monthly" => "Monthly"
-    }.freeze
-    validates :email_frequency, inclusion: { in: EMAIL_FREQUENCIES.keys }, allow_nil: true
 
     has_many :chat_sessions, dependent: :destroy
     has_many :chat_messages, through: :chat_sessions
