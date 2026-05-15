@@ -2,8 +2,8 @@
   <div class="chat-header">
     <div class="chat-header-content">
       <div>
-        <h2><i class="bi bi-chat-dots"></i> Chat with Denny!</h2>
-        <p>Denny helps you find personalized apartment recommendations</p>
+        <h2><i class="bi bi-chat-dots"></i> Let's chat more about your apartment search!</h2>
+        <p>Tell us what you're looking for and we'll see what we can find</p>
       </div>
       <div class="chat-header-actions">
         <%= button_to new_chat_session_path, class: "btn btn-outline-secondary btn-sm" do %>
@@ -16,18 +16,17 @@
   <div class="chat-messages" id="chatMessages">
     <% if @messages.empty? %>
       <div class="welcome-message">
-        <div class="bot-avatar">🤖</div>
+        <div class="bot-avatar"><i class="bi bi-houses"></i></div>
         <div class="message-bubble assistant-message">
           <p>Hi <%= current_user.username %>! 👋</p>
-          <p>I'm Denny! I'm here to help you find your perfect apartment.</p>
-          <p>Let's start with your budget—what's your monthly rent range?</p>
+          <p>What kind of place are you looking for? You can give me some basic details first(size, price, location). After that, we can talk more about style and features if you'd like!</p>
         </div>
       </div>
     <% else %>
       <% @messages.each do |message| %>
         <div class="message <%= message.role %>-message-wrapper">
           <% if message.role == 'assistant' %>
-            <div class="bot-avatar">🤖</div>
+            <div class="bot-avatar"><i class="bi bi-houses"></i></div>
           <% end %>
           
           <div class="message-bubble <%= message.role %>-message">
@@ -45,7 +44,7 @@
     <% end %>
     
     <div id="typingIndicator" class="typing-indicator" style="display: none;">
-      <div class="bot-avatar">🤖</div>
+      <div class="bot-avatar"><i class="bi bi-houses"></i></div>
       <div class="typing-bubble">
         <span></span>
         <span></span>
@@ -99,7 +98,7 @@
   }
 
   .chat-header {
-    background: linear-gradient(135deg, #2d5016 0%, #1b3409 100%);
+    background: linear-gradient(135deg, #3a6925 0%, #2d4d16 100%);
     color: white;
     padding: 20px 25px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
@@ -168,7 +167,7 @@
   }
 
   .bot-avatar {
-    background: linear-gradient(135deg, #6b8e23 0%, #556b2f 100%);
+    background: linear-gradient(135deg, #84b746 0%, #6c9540 100%);
   }
 
   .user-avatar {
@@ -193,7 +192,7 @@
   }
 
   .user-message {
-    background: linear-gradient(135deg, #6b8e23 0%, #556b2f 100%);
+    background: linear-gradient(135deg, #84b746 0%, #6c9540 100%);
     color: white;
     border-radius: 16px 16px 4px 16px;
     margin-left: auto;
@@ -279,14 +278,14 @@
 
   .chat-input:focus {
     outline: none;
-    border-color: #6b8e23;
-    box-shadow: 0 0 0 3px rgba(107, 142, 35, 0.1);
+    border-color: #84b746;
+    box-shadow: 0 0 0 3px rgba(132, 183, 70, 0.1);
   }
 
   .chat-send-btn {
     width: 48px;
     height: 48px;
-    background: linear-gradient(135deg, #6b8e23 0%, #556b2f 100%);
+    background: linear-gradient(135deg, #84b746 0%, #6c9540 100%);
     color: white;
     border: none;
     border-radius: 50%;
@@ -300,7 +299,7 @@
 
   .chat-send-btn:hover {
     transform: scale(1.1);
-    box-shadow: 0 4px 12px rgba(107, 142, 35, 0.3);
+    box-shadow: 0 4px 12px rgba(132, 183, 70, 0.3);
   }
 
   .chat-send-btn:disabled {
@@ -327,7 +326,7 @@
 
   .suggestion-chip:hover {
     background: #e5e7eb;
-    border-color: #6b8e23;
+    border-color: #84b746;
   }
 
   @keyframes fadeIn {
