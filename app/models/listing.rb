@@ -24,6 +24,8 @@ class Listing < ApplicationRecord
   has_many :bookmarked_by_users, through: :bookmarks, source: :user
   has_one :listing_embedding, dependent: :destroy
 
+  after_commit :enqueue_embedding_refresh, on: [:create, :update]
+
   validates :title, presence: true, length: { maximum: 100 }
   validates :description, presence: true, length: { maximum: 2000 }
   validates :price, presence: true, numericality: { greater_than: 0 }
@@ -39,5 +41,11 @@ class Listing < ApplicationRecord
 
   def embedding_text
     [title, description, neighborhood, details, address, city, state].compact.join(' ')
+  end
+
+  private
+
+  def enqueue_embedding_refresh
+    GenerateListingEmbeddingJob.perform_later(id)
   end
 end
