@@ -43,6 +43,9 @@ class User < ApplicationRecord
 
   scope :recommendation_recipients, -> { where(receive_recommendations: true).where.not(email_frequency: nil) }
 
+  has_many :chat_sessions, dependent: :destroy
+  has_many :chat_messages, through: :chat_sessions
+
   def due_for_recommendations?(date = Date.current)
     return false unless receive_recommendations? && email_frequency.present?
     return false if last_recommendation_sent_at.present? && sent_in_same_delivery_period?(date)
@@ -59,6 +62,29 @@ class User < ApplicationRecord
     else
       false
     end
+  end
+
+  def active_chat_session
+    chat_sessions.active.last || chat_sessions.create!(started_at: Time.current)
+  end
+
+  def self.send_recommendation_email!(user_or_id)
+    user = user_or_id.is_a?(User) ? user_or_id : find_by(id: user_or_id)
+    return false unless user
+
+    SendRecommendationEmailJob.perform_now(user.id)
+    true
+  end
+
+  def self.send_due_recommendation_emails!(date = Date.current)
+    delivered_count = 0
+    recommendation_recipients.find_each do |user|
+      next unless user.due_for_recommendations?(date)
+
+      SendRecommendationEmailJob.perform_now(user.id)
+      delivered_count += 1
+    end
+    delivered_count
   end
 
   private
@@ -79,12 +105,5 @@ class User < ApplicationRecord
     else
       false
     end
-  end
-
-  has_many :chat_sessions, dependent: :destroy
-  has_many :chat_messages, through: :chat_sessions
-
-  def active_chat_session
-    chat_sessions.active.last || chat_sessions.create!(started_at: Time.current)
   end
 end
