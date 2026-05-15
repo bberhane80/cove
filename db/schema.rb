@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_02_10_003633) do
+ActiveRecord::Schema[8.0].define(version: 2026_05_15_160000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -19,6 +19,33 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_10_003633) do
     t.integer "listing_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "chat_messages", force: :cascade do |t|
+    t.bigint "chat_session_id", null: false
+    t.string "role"
+    t.text "content"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["chat_session_id"], name: "index_chat_messages_on_chat_session_id"
+  end
+
+  create_table "chat_sessions", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.datetime "started_at"
+    t.datetime "ended_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_chat_sessions_on_user_id"
+  end
+
+  create_table "listing_embeddings", force: :cascade do |t|
+    t.bigint "listing_id", null: false
+    t.jsonb "embedding", default: [], null: false
+    t.text "content", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["listing_id"], name: "index_listing_embeddings_on_listing_id", unique: true
   end
 
   create_table "listings", force: :cascade do |t|
@@ -195,10 +222,15 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_10_003633) do
     t.string "name"
     t.text "bio"
     t.string "email_frequency"
+    t.datetime "last_recommendation_sent_at"
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["last_recommendation_sent_at"], name: "index_users_on_last_recommendation_sent_at"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "chat_messages", "chat_sessions"
+  add_foreign_key "chat_sessions", "users"
+  add_foreign_key "listing_embeddings", "listings"
   add_foreign_key "solid_queue_blocked_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "solid_queue_claimed_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "solid_queue_failed_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
