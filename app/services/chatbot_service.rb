@@ -2,29 +2,22 @@ class ChatbotService
   def initialize(user)
     @user = user
     @client = Anthropic::Client.new(access_token: ENV["ANTHROPIC_API_KEY"])
+    @retriever = ListingRetrievalService.new
   end
 
   def send_message(user_message, session)
     # Add user message to session
     session.add_message('user', user_message)
 
-    # Analyze if user is asking for recommendations
-    if should_recommend_listings?(user_message, session)
-      # Extract criteria from conversation
-      criteria = extract_search_criteria(session)
-
-      # Find matching listings
-      listings = find_matching_listings(criteria)
-
-      # Include listings in context
-      system_context = system_prompt_with_listings(listings)
+    retrieved_listings = @retriever.retrieve(user_message, top_k: 5)
+    system_context = if retrieved_listings.any?
+      system_prompt_with_retrieved_listings(retrieved_listings)
     else
-      system_context = system_prompt
-      listings = nil
+      system_prompt
     end
 
     # Build conversation history
-    conversation = build_conversation_history(session)
+    conversation = build_conversation_history(session, limit: 12)
 
     # Get AI response
     response = @client.messages(
@@ -46,7 +39,7 @@ class ChatbotService
       success: true,
       message: assistant_message,
       session_id: session.id,
-      listings: listings
+      listings: retrieved_listings.map { |entry| entry[:listing] }
     }
   rescue => e
     Rails.logger.error("Chatbot error: #{e.message}")
@@ -94,7 +87,7 @@ def extract_search_criteria(session)
 end
 
 def find_matching_listings(criteria)
-  listings = Listing.active
+  listings = Listing.all
   
   listings = listings.where('price <= ?', criteria[:max_price]) if criteria[:max_price]
   listings = listings.where(bedrooms: criteria[:bedrooms]) if criteria[:bedrooms]
@@ -114,16 +107,46 @@ end
     system_prompt + "\n\nCURRENT MATCHING LISTINGS:\n#{listings_text}"
   end
 
+  def system_prompt_with_retrieved_listings(retrieved_listings)
+    listing_context = retrieved_listings.map.with_index(1) do |entry, index|
+      listing = entry[:listing]
+      snippet = entry[:snippet]
+      <<~LISTING
+        LISTING #{index}
+        ID: #{listing.id}
+        TITLE: #{listing.title}
+        CITY: #{listing.city}
+        PRICE: $#{listing.price.to_i}
+        BEDROOMS: #{listing.bedrooms}
+        BATHROOMS: #{listing.bathrooms}
+        SUMMARY: #{snippet}
+        URL: #{Rails.application.routes.url_helpers.listing_url(listing, host: 'localhost:3000')}
+      LISTING
+    end.join("\n")
+
+    <<~PROMPT
+      #{system_prompt}
+
+      Use the following listing information to answer the user's question. If the user asks for a recommendation, base your answer on these listings and do not invent other properties.
+
+      RELEVANT LISTINGS:
+      #{listing_context}
+    PROMPT
+  end
+
+  def format_listing_snippet(listing)
+    summary = [listing.title, listing.city, listing.neighborhood, listing.description].compact.join(' – ')
+    summary.truncate(180)
+  end
+
   # Stub for system_prompt if not defined elsewhere
   def system_prompt
     "You are Cove, a helpful real estate assistant."
   end
 
   # Stub for build_conversation_history if not defined elsewhere
-  def build_conversation_history(session)
-    # This should return the conversation in the format expected by the AI client
-    # For now, return a simple array of messages
-    session.chat_messages.map do |msg|
+  def build_conversation_history(session, limit: 12)
+    session.chat_messages.order(:created_at).last(limit).map do |msg|
       { role: msg.role, content: msg.content }
     end
   end
