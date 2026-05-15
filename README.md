@@ -30,17 +30,6 @@ Cove is a modern, full-stack apartment rental platform that uses artificial inte
 - **Email Preferences** - Granular control over recommendation frequency (daily, weekly, bi-weekly, monthly)
 - **Profile Customization** - Users can add name, bio, and manage email settings
 
-## 🌟 Features
-
-### Core Functionality
-- **Browse Listings** - Explore available rental properties with detailed information
-- **Smart Search** - Natural language search across titles, descriptions, locations, and amenities
-- **User Authentication** - Secure sign-up and login with Devise
-- **Bookmark System** - Save favorite listings for easy access
-- **User Profiles** - Personalized profiles showing bookmarked properties
-
-### AI-Powered Features
-
 ## 🛠️ Tech Stack
 
 **Backend:**

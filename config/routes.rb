@@ -11,11 +11,12 @@ Rails.application.routes.draw do
   # About page
   get 'about', to: 'pages#about'
   get 'landing', to: 'pages#landing'
+
   
-  # Health check
-  get '/health', to: 'health#index'
-  
-  # ...existing routes...
+  get 'chat', to: 'chats#show'
+  post 'chat', to: 'chats#create'
+  post 'chat/new_session', to: 'chats#new_session', as: :new_chat_session
+  delete 'chat/:id', to: 'chats#destroy', as: :end_chat_session
   
   namespace :api do
     namespace :v1 do

@@ -22,6 +22,9 @@
 class Listing < ApplicationRecord
   has_many :bookmarks, dependent: :destroy
   has_many :bookmarked_by_users, through: :bookmarks, source: :user
+  has_one :listing_embedding, dependent: :destroy
+
+  after_commit :enqueue_embedding_refresh, on: [:create, :update]
 
   validates :title, presence: true, length: { maximum: 100 }
   validates :description, presence: true, length: { maximum: 2000 }
@@ -35,4 +38,14 @@ class Listing < ApplicationRecord
   scope :recent, -> { order(created_at: :desc) }
   scope :by_city, ->(city) { where(city: city) if city.present? }
   scope :by_price_range, ->(min, max) { where(price: min..max) if min.present? && max.present? }
+
+  def embedding_text
+    [title, description, neighborhood, details, address, city, state].compact.join(' ')
+  end
+
+  private
+
+  def enqueue_embedding_refresh
+    GenerateListingEmbeddingJob.perform_later(id)
+  end
 end

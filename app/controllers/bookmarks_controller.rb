@@ -27,17 +27,18 @@ class BookmarksController < ApplicationController
     @bookmark = current_user.bookmarks.find(params[:id])
     @listing = @bookmark.listing
     @bookmark.destroy
-    
-    # Check where the request came from
+
     referer = request.referer
-    
+    user_profile_path = Rails.application.routes.url_helpers.user_path(current_user)
+
     respond_to do |format|
       if referer&.include?('bookmarks')
-        # If coming from bookmarks page, redirect back there
         format.html { redirect_to bookmarks_path, notice: 'Bookmark removed.' }
         format.json { render json: { success: true, message: 'Bookmark removed!', redirect: bookmarks_path }, status: :ok }
+      elsif referer&.include?(user_profile_path)
+        format.html { redirect_to user_profile_path, notice: 'Bookmark removed.' }
+        format.json { render json: { success: true, message: 'Bookmark removed!', redirect: user_profile_path }, status: :ok }
       else
-        # Otherwise redirect to the listing page
         format.html { redirect_to @listing, notice: 'Bookmark removed.' }
         format.json { render json: { success: true, message: 'Bookmark removed!', redirect: listing_path(@listing) }, status: :ok }
       end

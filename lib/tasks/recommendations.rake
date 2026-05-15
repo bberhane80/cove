@@ -41,4 +41,31 @@ namespace :recommendations do
     
     puts "Done!"
   end
+
+  desc "Send a recommendation email to a specific user by id or email"
+  task :send, [:user_identifier] => :environment do |_task, args|
+    identifier = args[:user_identifier]
+    unless identifier.present?
+      puts "Usage: bundle exec rake recommendations:send[user_id|user_email]"
+      exit 1
+    end
+
+    user = User.find_by(id: identifier) || User.find_by(email: identifier)
+    unless user
+      puts "User not found for '#{identifier}'"
+      exit 1
+    end
+
+    if User.send_recommendation_email!(user)
+      puts "Recommendation email triggered for #{user.email}"
+    else
+      puts "No recommendation email sent for #{user.email}"
+    end
+  end
+
+  desc "Send recommendation emails now for all due users"
+  task send_due: :environment do
+    count = User.send_due_recommendation_emails!
+    puts "Recommendation emails delivered for #{count} user(s)."
+  end
 end
