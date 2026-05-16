@@ -80,6 +80,16 @@
     background-color: #2c5282;
     transform: translateY(-1px);
   }
+  .btn-view-details {
+    background-color: #3a6925;
+    color: #ffffff;
+    border: 1px solid #2d4d16;
+  }
+  .btn-view-details:hover {
+    background-color: #2d4d16;
+    color: #ffffff;
+    transform: translateY(-1px);
+  }
   .btn-remove {
     background-color: #fc8181;
     color: white;
@@ -212,7 +222,7 @@
             </div>
             <p class="description"><%= truncate(listing.description, length: 100) %></p>
             <div class="listing-actions">
-              <%= link_to 'View Details', listing, class: 'btn btn-primary' %>
+              <%= link_to 'View Details', listing, class: 'btn btn-view-details' %>
               <% if @bookmarked_listing_ids.include?(listing.id) %>
                 <% bookmark = current_user.bookmarks.find_by(listing_id: listing.id) %>
                 <%= button_to '⭐ Bookmarked', bookmark_path(bookmark), method: :delete, class: 'btn btn-bookmarked' %>
