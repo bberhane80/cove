@@ -3,16 +3,13 @@ class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update]
   before_action :authorize_user, only: [:edit, :update]
 
-  # GET /users/:id
   def show
     @bookmarks = @user.bookmarks.includes(:listing).order(created_at: :desc)
   end
 
-  # GET /users/:id/edit
   def edit
   end
 
-  # PATCH/PUT /users/:id
   def update
     if @user.update(user_params)
       redirect_to @user, notice: 'Profile updated successfully.'
@@ -34,6 +31,6 @@ class UsersController < ApplicationController
   end
 
   def user_params
-  params.require(:user).permit(:email, :name, :bio)
+    params.require(:user).permit(:email, :username, :name, :bio, :receive_recommendations, :email_frequency)
   end
 end

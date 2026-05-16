@@ -1,3 +1,11 @@
+production:
+  schedule_recommendation_emails:
+    class: ScheduleRecommendationEmailsJob
+    queue: default
+    args: []
+    schedule: every day
+
+# Example recurring tasks:
 # production:
 #   periodic_cleanup:
 #     class: CleanSoftDeletedRecordsJob

@@ -4,8 +4,20 @@ class ListingsController < ApplicationController
 
   # GET /listings
   def index
-    @listings = Listing.all.order(created_at: :desc)
     @bookmarked_listing_ids = current_user.bookmarks.pluck(:listing_id)
+    
+    if params[:q].present?
+      # Use AI search
+      search_service = AiListingSearchService.new(params[:q])
+      result = search_service.search
+      
+      @listings = result[:listings]
+      @search_explanation = result[:explanation]
+      @search_query = params[:q]
+    else
+      # Default: show all listings
+      @listings = Listing.all.order(created_at: :desc)
+    end
   end
 
   # GET /listings/:id
