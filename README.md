@@ -239,8 +239,6 @@ SMTP_PASSWORD=your-app-password
 
 **Built with ❤️ during Discovery Partners Institute Software Developer Apprenticeship**
 
-*Making home hunting smarter, one AI recommendation at a time.* 🏡✨
-
 ---
 >>>>>>> bb-ajax
 
