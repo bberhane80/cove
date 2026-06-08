@@ -25,22 +25,8 @@
     <p class="description"><%= truncate(listing.description, length: 100) %></p>
     
     <div class="listing-actions">
-      <%= link_to 'View Details', listing, class: 'btn btn-primary' %>
-      
-      <% if local_assigns[:show_bookmark_date] && defined?(bookmark) %>
-        <%= button_to bookmark_path(bookmark), method: :delete, class: 'btn btn-remove', data: { confirm: 'Remove this bookmark?' } do %>
-          <i class="bi bi-x-lg"></i> Remove
-        <% end %>
-      <% elsif local_assigns[:bookmarked_ids]&.include?(listing.id) %>
-        <% bookmark = current_user.bookmarks.find_by(listing_id: listing.id) %>
-        <%= button_to bookmark_path(bookmark), method: :delete, class: 'btn btn-bookmarked' do %>
-          <i class="bi bi-bookmark-star-fill"></i>
-        <% end %>
-      <% else %>
-        <%= button_to bookmarks_path(listing_id: listing.id), method: :post, class: 'btn btn-bookmark' do %>
-          <i class="bi bi-bookmark"></i>
-        <% end %>
-      <% end %>
+      <%= link_to 'View Details', listing, class: 'btn btn-view-details' %>
+      <%= render 'shared/bookmark_button', listing: listing, bookmark: defined?(bookmark) ? bookmark : nil, show_bookmark_date: local_assigns[:show_bookmark_date] %>
     </div>
     
     <% if local_assigns[:show_bookmark_date] && defined?(bookmark) %>

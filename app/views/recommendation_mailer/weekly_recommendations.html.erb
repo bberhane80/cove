@@ -18,7 +18,7 @@
       background-color: #ffffff;
     }
     .header {
-      background: linear-gradient(135deg, #2d5016 0%, #1b3409 100%);
+      background: linear-gradient(135deg, #3a6925 0%, #2d4d16 100%);
       padding: 30px 20px;
       text-align: center;
       color: white;
@@ -37,7 +37,7 @@
     }
     .summary {
       background: #f0fdf4;
-      border-left: 4px solid #2d5016;
+      border-left: 4px solid #3a6925;
       padding: 15px;
       margin: 20px 0;
       border-radius: 4px;
@@ -69,7 +69,7 @@
     .listing-price {
       font-size: 24px;
       font-weight: 700;
-      color: #2d5016;
+      color: #3a6925;
       margin: 10px 0;
     }
     .listing-info {
@@ -89,7 +89,7 @@
     }
     .match-score {
       display: inline-block;
-      background: #2d5016;
+      background: #3a6925;
       color: white;
       padding: 4px 12px;
       border-radius: 12px;
@@ -98,7 +98,7 @@
     }
     .cta-button {
       display: inline-block;
-      background: linear-gradient(135deg, #6b8e23 0%, #556b2f 100%);
+      background: linear-gradient(135deg, #84b746 0%, #6c9540 100%);
       color: white;
       padding: 12px 30px;
       text-decoration: none;
@@ -115,7 +115,7 @@
       border-top: 1px solid #e5e7eb;
     }
     .footer a {
-      color: #2d5016;
+      color: #3a6925;
       text-decoration: none;
     }
   </style>
@@ -176,12 +176,14 @@
       </p>
     </div>
     
-    <div class="footer">
-      <p>
-        You're receiving this because you have recommendation emails enabled.<br>
-        <%= link_to "Update your preferences", edit_user_url(@user) %> | 
-        <%= link_to "Unsubscribe", edit_user_url(@user) %>
-      </p>
+          <div class="footer">
+        <p>
+          <strong>Cove</strong> - Find your perfect home<br>
+          You're receiving this because you have recommendation emails enabled.<br>
+          <%= link_to "Update your preferences", edit_user_url(@user) %> | 
+          <%= link_to "Unsubscribe", edit_user_url(@user) %>
+        </p>
+      </div>
     </div>
   </div>
 </body>

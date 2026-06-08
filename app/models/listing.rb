@@ -22,14 +22,30 @@
 class Listing < ApplicationRecord
   has_many :bookmarks, dependent: :destroy
   has_many :bookmarked_by_users, through: :bookmarks, source: :user
+  has_one :listing_embedding, dependent: :destroy
 
-  validates :title, :price, :bedrooms, :bathrooms, :address, :city, :state, presence: true
-  validates :price, numericality: { greater_than: 0 }
-  validates :bedrooms, :bathrooms, numericality: { greater_than_or_equal_to: 0 }
+  after_commit :enqueue_embedding_refresh, on: [:create, :update]
+
+  validates :title, presence: true, length: { maximum: 100 }
+  validates :description, presence: true, length: { maximum: 2000 }
+  validates :price, presence: true, numericality: { greater_than: 0 }
+  validates :bedrooms, numericality: { greater_than_or_equal_to: 0, only_integer: true }
+  validates :bathrooms, numericality: { greater_than: 0 }
+  validates :city, :state, presence: true
 
   PROPERTY_TYPES = [ "House", "Apartment", "Condo", "Townhouse", "Land" ]
 
   scope :recent, -> { order(created_at: :desc) }
   scope :by_city, ->(city) { where(city: city) if city.present? }
   scope :by_price_range, ->(min, max) { where(price: min..max) if min.present? && max.present? }
+
+  def embedding_text
+    [title, description, neighborhood, details, address, city, state].compact.join(' ')
+  end
+
+  private
+
+  def enqueue_embedding_refresh
+    GenerateListingEmbeddingJob.perform_later(id)
+  end
 end

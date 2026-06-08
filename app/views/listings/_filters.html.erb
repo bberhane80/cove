@@ -1,0 +1,363 @@
+<div class="filters-container">
+  <button class="filter-toggle-btn" id="filterToggle">
+    <i class="bi bi-funnel"></i>
+    <span>Filters</span>
+    <% if params.slice(:city, :state, :min_price, :max_price, :bedrooms, :bathrooms, :min_sqft, :max_sqft).values.any?(&:present?) %>
+      <span class="filter-badge"><%= params.slice(:city, :state, :min_price, :max_price, :bedrooms, :bathrooms, :min_sqft, :max_sqft).values.reject(&:blank?).count %></span>
+    <% end %>
+    <i class="bi bi-chevron-down toggle-icon"></i>
+  </button>
+
+  <div class="filters-panel" id="filtersPanel">
+    <%= form_with url: listings_path, method: :get, class: "filters-form" do |f| %>
+      <!-- Preserve search query -->
+      <%= hidden_field_tag :search, params[:search] if params[:search].present? %>
+      
+      <div class="filters-grid">
+        <!-- Location Filters -->
+        <div class="filter-group">
+          <label class="filter-label">
+            <i class="bi bi-geo-alt"></i> City
+          </label>
+          <%= f.select :city, 
+              options_for_select([['Any City', '']] + (@cities || []).map { |c| [c, c] }, params[:city]),
+              {},
+              class: 'filter-select' %>
+        </div>
+
+        <div class="filter-group">
+          <label class="filter-label">
+            <i class="bi bi-map"></i> State
+          </label>
+          <%= f.select :state,
+              options_for_select([['Any State', '']] + (@states || []).map { |s| [s, s] }, params[:state]),
+              {},
+              class: 'filter-select' %>
+        </div>
+
+        <!-- Price Filters -->
+        <div class="filter-group">
+          <label class="filter-label">
+            <i class="bi bi-cash"></i> Min Price
+          </label>
+          <%= f.select :min_price,
+              options_for_select([
+                ['No Min', ''],
+                ['$500', 500],
+                ['$1,000', 1000],
+                ['$1,500', 1500],
+                ['$2,000', 2000],
+                ['$2,500', 2500],
+                ['$3,000', 3000]
+              ], params[:min_price]),
+              {},
+              class: 'filter-select' %>
+        </div>
+
+        <div class="filter-group">
+          <label class="filter-label">
+            <i class="bi bi-cash-stack"></i> Max Price
+          </label>
+          <%= f.select :max_price,
+              options_for_select([
+                ['No Max', ''],
+                ['$1,500', 1500],
+                ['$2,000', 2000],
+                ['$2,500', 2500],
+                ['$3,000', 3000],
+                ['$4,000', 4000],
+                ['$5,000', 5000],
+                ['$6,000+', 10000]
+              ], params[:max_price]),
+              {},
+              class: 'filter-select' %>
+        </div>
+
+        <!-- Bedrooms Filter -->
+        <div class="filter-group">
+          <label class="filter-label">
+            <i class="bi bi-door-closed"></i> Bedrooms
+          </label>
+          <%= f.select :bedrooms,
+              options_for_select([
+                ['Any', ''],
+                ['Studio', 0],
+                ['1+', 1],
+                ['2+', 2],
+                ['3+', 3],
+                ['4+', 4]
+              ], params[:bedrooms]),
+              {},
+              class: 'filter-select' %>
+        </div>
+
+        <!-- Bathrooms Filter -->
+        <div class="filter-group">
+          <label class="filter-label">
+            <i class="bi bi-droplet"></i> Bathrooms
+          </label>
+          <%= f.select :bathrooms,
+              options_for_select([
+                ['Any', ''],
+                ['1+', 1],
+                ['1.5+', 1.5],
+                ['2+', 2],
+                ['2.5+', 2.5],
+                ['3+', 3]
+              ], params[:bathrooms]),
+              {},
+              class: 'filter-select' %>
+        </div>
+
+        <!-- Square Feet Filters -->
+        <div class="filter-group">
+          <label class="filter-label">
+            <i class="bi bi-rulers"></i> Min Sq Ft
+          </label>
+          <%= f.select :min_sqft,
+              options_for_select([
+                ['No Min', ''],
+                ['400+', 400],
+                ['600+', 600],
+                ['800+', 800],
+                ['1,000+', 1000],
+                ['1,500+', 1500],
+                ['2,000+', 2000]
+              ], params[:min_sqft]),
+              {},
+              class: 'filter-select' %>
+        </div>
+
+        <div class="filter-group">
+          <label class="filter-label">
+            <i class="bi bi-bounding-box"></i> Max Sq Ft
+          </label>
+          <%= f.select :max_sqft,
+              options_for_select([
+                ['No Max', ''],
+                ['800', 800],
+                ['1,000', 1000],
+                ['1,500', 1500],
+                ['2,000', 2000],
+                ['2,500', 2500],
+                ['3,000+', 10000]
+              ], params[:max_sqft]),
+              {},
+              class: 'filter-select' %>
+        </div>
+      </div>
+
+      <div class="filter-actions">
+        <%= f.submit 'Apply Filters', class: 'btn btn-primary' %>
+        <%= link_to 'Clear All', listings_path, class: 'btn btn-secondary' %>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const toggleBtn = document.getElementById('filterToggle');
+    const panel = document.getElementById('filtersPanel');
+    const icon = toggleBtn.querySelector('.toggle-icon');
+    
+    // Check if filters are active on page load
+    const hasActiveFilters = <%= params.slice(:city, :state, :min_price, :max_price, :bedrooms, :bathrooms, :min_sqft, :max_sqft).values.any?(&:present?) %>;
+    
+    // Show panel if filters are active
+    if (hasActiveFilters) {
+      panel.classList.add('show');
+      icon.style.transform = 'rotate(180deg)';
+    }
+    
+    toggleBtn.addEventListener('click', () => {
+      panel.classList.toggle('show');
+      
+      if (panel.classList.contains('show')) {
+        icon.style.transform = 'rotate(180deg)';
+      } else {
+        icon.style.transform = 'rotate(0deg)';
+      }
+    });
+  });
+</script>
+
+<style>
+  .filters-container {
+    margin-bottom: 20px;
+  }
+
+  .filter-toggle-btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 12px 20px;
+    background: white;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 1rem;
+    color: #374151;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+  }
+
+  .filter-toggle-btn:hover {
+    border-color: #3a6925;
+    background: #f9fafb;
+  }
+
+  .filter-toggle-btn i.bi-funnel {
+    font-size: 1.1rem;
+    color: #3a6925;
+  }
+
+  .filter-badge {
+    position: absolute;
+    right: 50px;
+    background: #3a6925;
+    color: white;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 700;
+  }
+
+  .toggle-icon {
+    transition: transform 0.3s ease;
+    margin-left: auto;
+  }
+
+  .filters-panel {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    background: white;
+    border: 2px solid #e5e7eb;
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+  }
+
+  .filters-panel.show {
+    max-height: 600px;
+    padding: 20px;
+    margin-top: -2px;
+  }
+
+  .filters-form {
+    margin: 0;
+  }
+
+  .filters-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 15px;
+    margin-bottom: 20px;
+  }
+
+  .filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .filter-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #374151;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .filter-label i {
+    color: #3a6925;
+    font-size: 0.9rem;
+  }
+
+  .filter-select {
+    padding: 8px 12px;
+    border: 2px solid #e5e7eb;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    color: #374151;
+    background: white;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .filter-select:focus {
+    outline: none;
+    border-color: #3a6925;
+    box-shadow: 0 0 0 3px rgba(45, 80, 22, 0.1);
+  }
+
+  .filter-select:hover {
+    border-color: #84b746;
+  }
+
+  .filter-actions {
+    display: flex;
+    gap: 10px;
+    padding-top: 15px;
+    border-top: 1px solid #e5e7eb;
+  }
+
+  .filter-actions .btn {
+    flex: 1;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .filter-actions .btn-primary {
+    background: linear-gradient(135deg, #84b746 0%, #6c9540 100%);
+    color: white;
+    border: none;
+  }
+
+  .filter-actions .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(132, 183, 70, 0.3);
+  }
+
+  .filter-actions .btn-secondary {
+    background: white;
+    color: #6b7280;
+    border: 2px solid #e5e7eb;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .filter-actions .btn-secondary:hover {
+    background: #f9fafb;
+    border-color: #d1d5db;
+  }
+
+  @media (max-width: 768px) {
+    .filters-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .filter-actions {
+      flex-direction: column;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .filters-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

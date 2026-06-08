@@ -1,0 +1,13 @@
+<%= turbo_frame_tag dom_id(listing, :bookmark) do %>
+  <% bookmark ||= current_user&.bookmarks&.find_by(listing_id: listing.id) %>
+
+  <% if bookmark.present? %>
+    <%= button_to bookmark_path(bookmark), method: :delete, class: 'btn btn-bookmarked', data: { turbo: true } do %>
+      <i class="bi bi-bookmark-star-fill"></i> Bookmarked
+    <% end %>
+  <% else %>
+    <%= button_to bookmarks_path(listing_id: listing.id), method: :post, class: 'btn btn-bookmark', data: { turbo: true } do %>
+      <i class="bi bi-bookmark"></i> Bookmark
+    <% end %>
+  <% end %>
+<% end %>

@@ -1,7 +1,5 @@
 <div class="profile-stats-container">
-  <h3 class="stats-title">
-    <i class="bi bi-person-badge"></i> My Profile
-  </h3>
+
   
   <div class="stats-grid">
     <!-- Username Card -->
@@ -47,6 +45,24 @@
       <div class="stat-content">
         <span class="stat-label">Member Since</span>
         <span class="stat-value"><%= user.created_at.strftime("%b %Y") %></span>
+      </div>
+    </div>
+    <!-- Email Recommendation Cadence Card -->
+    <div class="stat-card cadence-card">
+      <div class="stat-icon">
+        <i class="bi bi-envelope-paper"></i>
+      </div>
+      <div class="stat-content">
+        <span class="stat-label">Email Cadence</span>
+        <span class="stat-value">
+          <% if user.receive_recommendations? && user.email_frequency.present? %>
+            <%= user.email_frequency.titleize %>
+          <% elsif user.receive_recommendations? %>
+            Default
+          <% else %>
+            Off
+          <% end %>
+        </span>
       </div>
     </div>
   </div>

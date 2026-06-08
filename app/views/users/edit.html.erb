@@ -33,9 +33,11 @@
     </div>
 
     <div class="form-group">
-      <%= f.label :bio, "Bio (optional)" %>
-      <%= f.text_area :bio, class: 'form-control', rows: 4, placeholder: "Tell us about yourself" %>
-    </div>
+  <%= f.label :bio %>
+  <%= f.text_area :bio, rows: 4, class: "form-control", 
+                     placeholder: "Tell us about yourself..." %>
+  <small class="text-muted">Maximum 500 characters</small>
+</div>
 
     <hr>
 
@@ -121,7 +123,7 @@
   }
 
   .edit-profile-container h3 i {
-    color: #2d5016;
+    color: #3a6925;
   }
 
   .error-messages {
@@ -169,7 +171,7 @@
 
   .form-control:focus {
     outline: none;
-    border-color: #2d5016;
+    border-color: #3a6925;
     box-shadow: 0 0 0 3px rgba(45, 80, 22, 0.1);
   }
 
@@ -229,20 +231,20 @@
   }
 
   .frequency-option input[type="radio"]:checked + label .frequency-card {
-    border-color: #2d5016;
+    border-color: #3a6925;
     background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%);
     box-shadow: 0 2px 8px rgba(45, 80, 22, 0.15);
   }
 
   .frequency-card:hover {
-    border-color: #6b8e23;
+    border-color: #84b746;
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(45, 80, 22, 0.1);
   }
 
   .frequency-card i {
     font-size: 1.8rem;
-    color: #2d5016;
+    color: #3a6925;
     flex-shrink: 0;
   }
 
@@ -283,14 +285,14 @@
   }
 
   .btn-primary {
-    background: linear-gradient(135deg, #6b8e23 0%, #556b2f 100%);
+    background: linear-gradient(135deg, #84b746 0%, #6c9540 100%);
     color: white;
   }
 
   .btn-primary:hover {
-    background: linear-gradient(135deg, #7aa82c 0%, #6b8e23 100%);
+    background: linear-gradient(135deg, #90c84a 0%, #84b746 100%);
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(107, 142, 35, 0.3);
+    box-shadow: 0 4px 12px rgba(132, 183, 70, 0.3);
   }
 
   .btn-secondary {

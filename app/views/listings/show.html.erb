@@ -18,16 +18,7 @@
           </div>
           
           <div class="bookmark-action">
-            <% if @bookmarked %>
-              <% bookmark = current_user.bookmarks.find_by(listing_id: @listing.id) %>
-              <%= button_to bookmark_path(bookmark), method: :delete, class: 'btn btn-bookmarked' do %>
-                <i class="bi bi-bookmark-star-fill"></i> Bookmarked
-              <% end %>
-            <% else %>
-              <%= button_to bookmarks_path(listing_id: @listing.id), method: :post, class: 'btn btn-bookmark' do %>
-                <i class="bi bi-bookmark"></i> Bookmark
-              <% end %>
-            <% end %>
+            <%= render 'shared/bookmark_button', listing: @listing %>
           </div>
         </div>
         
@@ -136,13 +127,13 @@
   }
   
   .listing-address i {
-    color: #2d5016;
+    color: #3a6925;
   }
   
   .listing-price {
     font-size: 2.5rem;
     font-weight: 700;
-    color: #2d5016;
+    color: #3a6925;
     margin-bottom: 20px;
   }
   
@@ -168,7 +159,7 @@
   
   .feature-item i {
     font-size: 1.5rem;
-    color: #2d5016;
+    color: #3a6925;
   }
   
   .listing-description {
@@ -186,17 +177,17 @@
   
   .btn-bookmark {
     background: white;
-    border: 2px solid #2d5016;
-    color: #2d5016;
+    border: 2px solid #3a6925;
+    color: #3a6925;
   }
   
   .btn-bookmark:hover {
-    background: #2d5016;
+    background: #3a6925;
     color: white;
   }
   
   .btn-bookmarked {
-    background: #6b8e23;
+    background: #84b746;
     color: white;
   }
   
