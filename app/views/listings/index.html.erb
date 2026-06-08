@@ -90,6 +90,9 @@
     color: #ffffff;
     transform: translateY(-1px);
   }
+  .search-btn {
+    min-width: 140px;
+  }
   .btn-remove {
     background-color: #fc8181;
     color: white;
@@ -151,7 +154,7 @@
               placeholder: "What are you looking for? (e.g., 'affordable studio near transit')",
               value: params[:q],
               autocomplete: "off" %>
-          <button class="btn btn-primary search-btn" type="submit">
+          <button class="btn btn-view-details search-btn" type="submit">
             <i class="bi bi-search"></i> Search
           </button>
         </div>
@@ -223,12 +226,7 @@
             <p class="description"><%= truncate(listing.description, length: 100) %></p>
             <div class="listing-actions">
               <%= link_to 'View Details', listing, class: 'btn btn-view-details' %>
-              <% if @bookmarked_listing_ids.include?(listing.id) %>
-                <% bookmark = current_user.bookmarks.find_by(listing_id: listing.id) %>
-                <%= button_to '⭐ Bookmarked', bookmark_path(bookmark), method: :delete, class: 'btn btn-bookmarked' %>
-              <% else %>
-                <%= button_to '☆ Bookmark', bookmarks_path(listing_id: listing.id), method: :post, class: 'btn btn-bookmark' %>
-              <% end %>
+              <%= render 'shared/bookmark_button', listing: listing %>
             </div>
           </div>
         </div>

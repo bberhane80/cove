@@ -13,10 +13,12 @@ class BookmarksController < ApplicationController
     
     respond_to do |format|
       if @bookmark.save
-        format.html { redirect_to @listing, notice: 'Listing bookmarked!' }
+        format.html { redirect_back fallback_location: listings_path, notice: 'Listing bookmarked!' }
+        format.turbo_stream
         format.json { render json: { success: true, bookmark_id: @bookmark.id, message: 'Bookmarked!' }, status: :created }
       else
-        format.html { redirect_to @listing, alert: 'Could not bookmark listing.' }
+        format.html { redirect_back fallback_location: listings_path, alert: 'Could not bookmark listing.' }
+        format.turbo_stream { render turbo_stream: turbo_stream.replace(dom_id(@listing, :bookmark), partial: 'shared/bookmark_button', locals: { listing: @listing }) }
         format.json { render json: { success: false, errors: @bookmark.errors.full_messages }, status: :unprocessable_entity }
       end
     end
@@ -32,16 +34,9 @@ class BookmarksController < ApplicationController
     user_profile_path = Rails.application.routes.url_helpers.user_path(current_user)
 
     respond_to do |format|
-      if referer&.include?('bookmarks')
-        format.html { redirect_to bookmarks_path, notice: 'Bookmark removed.' }
-        format.json { render json: { success: true, message: 'Bookmark removed!', redirect: bookmarks_path }, status: :ok }
-      elsif referer&.include?(user_profile_path)
-        format.html { redirect_to user_profile_path, notice: 'Bookmark removed.' }
-        format.json { render json: { success: true, message: 'Bookmark removed!', redirect: user_profile_path }, status: :ok }
-      else
-        format.html { redirect_to @listing, notice: 'Bookmark removed.' }
-        format.json { render json: { success: true, message: 'Bookmark removed!', redirect: listing_path(@listing) }, status: :ok }
-      end
+      format.html { redirect_back fallback_location: listings_path, notice: 'Bookmark removed.' }
+      format.turbo_stream
+      format.json { render json: { success: true, message: 'Bookmark removed!', redirect: request.referer || listings_path }, status: :ok }
     end
   end
 end
