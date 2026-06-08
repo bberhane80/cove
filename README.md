@@ -3,7 +3,8 @@
 
 Cove is a modern, full-stack apartment rental platform that uses artificial intelligence to deliver personalized property recommendations. Built with Ruby on Rails and powered by Anthropic's Claude AI, Cove transforms the apartment hunting experience from overwhelming to empowering.
 
-![Cove Banner](https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=1200&h=300&fit=crop)
+<img width="2560" height="1600" alt="Screenshot 2026-06-08 at 12 24 45 PM" src="https://github.com/user-attachments/assets/525c4b0c-6bfd-4529-be83-919d733c69c3" />
+
 
 ## 🌟 Key Features
 
@@ -233,14 +234,11 @@ SMTP_ADDRESS=smtp.gmail.com
 SMTP_USERNAME=your-email@gmail.com
 SMTP_PASSWORD=your-app-password
 ```
-
-=======
 ---
 
 **Built with ❤️ during Discovery Partners Institute Software Developer Apprenticeship**
 
 ---
->>>>>>> bb-ajax
 
 ## 📊 Project Stats
 
@@ -252,8 +250,6 @@ SMTP_PASSWORD=your-app-password
 - **Development Time:** 4 weeks
 - **Contributors:** 1
 
-<<<<<<< HEAD
-=======
 ---
 
 ### Quick Links
@@ -272,7 +268,6 @@ SMTP_PASSWORD=your-app-password
 - created_at (datetime)
 - updated_at (datetime)
 ```
->>>>>>> bb-ajax
 
 ### Listings Table
 ```ruby
@@ -319,12 +314,3 @@ Cove features a calming, nature-inspired design with a focus on usability:
 - Progressive disclosure (collapsible filters)
 - Accessible color contrasts
 - Clear call-to-actions
-
-🚧 Roadmap
- Add listing filters (price range, bedrooms, bathrooms)
- Implement map view with location pins
- Add image upload for listings
- Integrate payment processing for featured listings
- Build messaging system between users and landlords
- Add reviews and ratings
- Implement advanced AI search with natural language queries
